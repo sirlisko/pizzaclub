@@ -1,0 +1,12 @@
+{
+  "name": "Gino Sorbillo",
+  "location": {
+    "city": "Naples",
+    "country": "IT",
+    "raw": "Via dei Tribunali 361–364, 80134 Naples, Italy"
+  },
+  "geopoint": {
+    "lat": 40.8503878,
+    "lng": 14.2553401
+  }
+}

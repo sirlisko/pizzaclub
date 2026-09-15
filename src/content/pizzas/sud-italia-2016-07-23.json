@@ -1,0 +1,8 @@
+{
+  "pizzaName": "Margherita",
+  "pizzeria": "sud-italia",
+  "dateEaten": "2016-07-23",
+  "rating": 5,
+  "notes": "Definitely one of the best in town!",
+  "photo": "./photos/sud-italia-2016-07-23.webp"
+}

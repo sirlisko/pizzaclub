@@ -1,0 +1,125 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import PizzaCard from '../../components/PizzaCard.astro'
+import {
+  getAllPizzeriaSlugs,
+  getPizzeriaBySlug,
+  getPizzasByPizzeria,
+  formatDate,
+} from '../../lib/content'
+
+export async function getStaticPaths() {
+  const slugs = await getAllPizzeriaSlugs()
+  return slugs.map((slug) => ({ params: { slug } }))
+}
+
+const { slug } = Astro.params
+const pizzeria = await getPizzeriaBySlug(slug!)
+const pizzas = pizzeria ? await getPizzasByPizzeria(pizzeria._id) : []
+
+// pizzas is sorted dateEaten desc (see getPizzasByPizzeria), so the first and
+// last entries are the most recent and the earliest visit.
+const avgRating = pizzas.length
+  ? pizzas.reduce((sum, p) => sum + p.rating, 0) / pizzas.length
+  : 0
+const firstVisit = pizzas[pizzas.length - 1]?.dateEaten
+const lastVisit = pizzas[0]?.dateEaten
+---
+
+<Layout
+  title={pizzeria ? `${pizzeria.name} | Pizza Club` : 'Not found | Pizza Club'}
+  description={
+    pizzeria
+      ? `${pizzas.length} pizza${pizzas.length === 1 ? '' : 's'} at ${pizzeria.name}.`
+      : undefined
+  }
+>
+  {pizzeria ? (
+    <div class="pizzeria-page">
+      <a class="back" href="/">
+        ← Back to all pizzas
+      </a>
+      <h2>{pizzeria.name}</h2>
+      <p class="location">
+        {pizzeria.location.city}, {pizzeria.location.country}
+      </p>
+      <p class="count">
+        {pizzas.length} pizza{pizzas.length === 1 ? '' : 's'} eaten here
+      </p>
+      {pizzas.length > 1 && (
+        <section class="pizzeria-stats">
+          <div class="stat">
+            <span class="stat-value">{avgRating.toFixed(1)}</span>
+            <span class="stat-label">Average rating</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">{formatDate(firstVisit)}</span>
+            <span class="stat-label">First visited</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">{formatDate(lastVisit)}</span>
+            <span class="stat-label">Last visited</span>
+          </div>
+        </section>
+      )}
+      <ul class="pizza-grid">
+        {pizzas.map((pizza) => (
+          <PizzaCard pizza={pizza} hidePizzeria />
+        ))}
+      </ul>
+    </div>
+  ) : (
+    <p>Couldn't find that pizzeria.</p>
+  )}
+</Layout>
+
+<style>
+  .pizzeria-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 var(--space-2) var(--space-5);
+  }
+  .back {
+    display: inline-block;
+    margin-bottom: var(--space-3);
+    text-decoration: none;
+    opacity: 0.85;
+  }
+  .location {
+    opacity: 0.9;
+    margin: 0 0 var(--space-1);
+  }
+  .count {
+    opacity: 0.9;
+    margin: 0 0 var(--space-3);
+  }
+  .pizzeria-stats {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+    margin: 0 0 var(--space-4);
+  }
+  .stat {
+    display: flex;
+    flex-direction: column;
+  }
+  .stat-value {
+    font-family: var(--font-heading);
+    font-size: 1.75rem;
+    font-weight: 700;
+  }
+  .stat-label {
+    opacity: 0.9;
+    font-size: 0.9rem;
+  }
+  .pizza-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 220px);
+    justify-content: center;
+    gap: var(--space-3);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+</style>

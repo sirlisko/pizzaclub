@@ -1,0 +1,12 @@
+{
+  "name": "Made of dough",
+  "location": {
+    "city": "Brixton, London",
+    "country": "UK",
+    "raw": "Brixton, London, UK"
+  },
+  "geopoint": {
+    "lat": 51.4633914,
+    "lng": -0.1148023
+  }
+}

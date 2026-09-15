@@ -1,0 +1,12 @@
+{
+  "name": "Ristorante Pizzeria \"Il Borgo - Il Linguaccione\"",
+  "location": {
+    "city": "Brinzio",
+    "country": "IT",
+    "raw": "Via Virgilio, 21030 Brinzio VA, Italy"
+  },
+  "geopoint": {
+    "lat": 45.8872251,
+    "lng": 8.7906925
+  }
+}

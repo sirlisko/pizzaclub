@@ -1,0 +1,12 @@
+{
+  "name": "Aeroporto di Olbia",
+  "location": {
+    "city": "Olbia",
+    "country": "IT",
+    "raw": "Olbia - IT"
+  },
+  "geopoint": {
+    "lat": 40.9232659,
+    "lng": 9.5027442
+  }
+}

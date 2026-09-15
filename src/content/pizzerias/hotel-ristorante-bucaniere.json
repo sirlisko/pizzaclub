@@ -1,0 +1,12 @@
+{
+  "name": "Hotel Ristorante Bucaniere",
+  "location": {
+    "city": "Leggiuno",
+    "country": "IT",
+    "raw": "Via Brughiera 1–9, 21038 Leggiuno VA, Italy"
+  },
+  "geopoint": {
+    "lat": 45.8810041,
+    "lng": 8.6016913
+  }
+}

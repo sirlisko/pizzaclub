@@ -1,0 +1,12 @@
+{
+  "name": "Pizzeria da Giuliano",
+  "location": {
+    "city": "Milan",
+    "country": "IT",
+    "raw": "Via Paolo Sarpi 58, 20154 Milan, Italy"
+  },
+  "geopoint": {
+    "lat": 45.481076,
+    "lng": 9.1710885
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Dodici",
+  "location": {
+    "city": "Walthamstow, London",
+    "country": "UK",
+    "raw": "101D Blackhorse Lane, Walthamstow, E17 6DJ, England"
+  },
+  "geopoint": {
+    "lat": 51.590671666666665,
+    "lng": -0.041377833333333336
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "pizzaName": "Pizza Fritta",
+  "pizzeria": "rosso-pomodoro",
+  "dateEaten": "2017-11-06",
+  "rating": 3,
+  "notes": "Really tasty, but a bit too heavy 😅",
+  "photo": "./photos/rosso-pomodoro-2017-11-06.webp"
+}

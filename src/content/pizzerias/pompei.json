@@ -1,0 +1,12 @@
+{
+  "name": "Pompei",
+  "location": {
+    "city": "Pula",
+    "country": "HR",
+    "raw": "Ulica Sergijevaca 24, 52100 Pula, Croatia"
+  },
+  "geopoint": {
+    "lat": 44.8681042,
+    "lng": 13.8452382
+  }
+}

@@ -1,39 +1,37 @@
 {
   "name": "pizzaclub",
   "description": "My tasty Pizza Adventure around the World.",
-  "version": "1.0.0",
+  "version": "2.0.0",
+  "type": "module",
   "author": {
     "name": "Luca Lischetti",
     "email": "luca@sirlisko.com",
     "url": "https://sirlisko.com"
   },
-  "homepage": "https://pizzablub.sirlisko.com",
+  "homepage": "https://pizzaclub.sirlisko.com",
   "dependencies": {
-    "gatsby": "^1.9.247",
-    "gatsby-link": "^1.6.40",
-    "gatsby-plugin-google-analytics": "^1.0.31",
-    "gatsby-plugin-react-helmet": "^2.0.10",
-    "gatsby-source-filesystem": "^1.5.38",
-    "gatsby-transformer-json": "^1.0.19",
-    "react-helmet": "^5.2.0"
+    "astro": "^7",
+    "maplibre-gl": "^6"
   },
   "devDependencies": {
-    "gh-pages": "^2.0.0",
-    "prettier": "^1.12.0"
+    "prettier": "^3",
+    "prettier-plugin-astro": "^1",
+    "sharp": "^0.35.5"
   },
   "keywords": [
     "pizza"
   ],
   "license": "MIT",
   "scripts": {
-    "build": "gatsby build",
-    "dev": "gatsby develop",
-    "deploy": "gatsby build --prefix-paths && gh-pages -d public",
-    "format": "prettier --write 'src/**/*.js'",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "format": "prettier --write 'src/**/*.{astro,ts,js}'",
+    "import:photos": "node scripts/import-photos.ts"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/sirlisko/pizzaclub"
-  }
+  },
+  "packageManager": "pnpm@12.6.0"
 }

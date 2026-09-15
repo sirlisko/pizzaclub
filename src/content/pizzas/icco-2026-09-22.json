@@ -1,0 +1,8 @@
+{
+  "pizzaName": "Margherita",
+  "pizzeria": "icco",
+  "dateEaten": "2026-09-22",
+  "rating": 2,
+  "notes": "Really cheap",
+  "photo": "./photos/icco-2026-09-22.webp"
+}

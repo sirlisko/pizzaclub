@@ -1,0 +1,8 @@
+{
+  "pizzaName": "Margherita",
+  "pizzeria": "spaccanapoli",
+  "dateEaten": "2015-09-18",
+  "rating": 5,
+  "notes": "Almost impossible to finish one.",
+  "photo": "./photos/spaccanapoli-2015-09-18.webp"
+}

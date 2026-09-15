@@ -1,0 +1,10 @@
+{
+  "pizzaName": "Bufala with confit tomatoes",
+  "pizzeria": "rudys-pizza-napoletana-shoreditch",
+  "dateEaten": "2026-08-24",
+  "rating": 5,
+  "price": {
+    "currency": "GBP"
+  },
+  "photo": "./photos/rudys-pizza-napoletana-shoreditch-2026-08-24.webp"
+}

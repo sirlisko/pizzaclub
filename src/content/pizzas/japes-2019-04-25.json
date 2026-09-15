@@ -1,0 +1,8 @@
+{
+  "pizzaName": "Chicago style",
+  "pizzeria": "japes",
+  "dateEaten": "2019-04-25",
+  "rating": 2,
+  "notes": "Not my thing",
+  "photo": "./photos/japes-2019-04-25.webp"
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Jolla - San Diego",
+  "location": {
+    "city": "Jolla, San Diego",
+    "country": "US",
+    "raw": "Jolla, San Diego, US"
+  },
+  "geopoint": {
+    "lat": 32.8458529,
+    "lng": -117.2575702
+  }
+}

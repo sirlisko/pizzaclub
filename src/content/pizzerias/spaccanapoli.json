@@ -1,0 +1,12 @@
+{
+  "name": "SpaccaNapoli",
+  "location": {
+    "city": "Bologna",
+    "country": "IT",
+    "raw": "Bologna, IT"
+  },
+  "geopoint": {
+    "lat": 44.4938203,
+    "lng": 11.3426327
+  }
+}

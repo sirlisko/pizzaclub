@@ -1,0 +1,12 @@
+{
+  "name": "La Bettola",
+  "location": {
+    "city": "Amsterdam",
+    "country": "NL",
+    "raw": "Amsterdam, Netherlands"
+  },
+  "geopoint": {
+    "lat": 52.3759829,
+    "lng": 4.8928106
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "pizzaName": "Margherita",
+  "pizzeria": "pizza-pilgrim",
+  "dateEaten": "2015-09-12",
+  "rating": 5,
+  "price": {
+    "amount": 11.95,
+    "currency": "GBP"
+  },
+  "photo": "./photos/pizza-pilgrim-2015-09-12.webp"
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Pizza Street",
+  "location": {
+    "city": "Shoreditch, London",
+    "country": "UK",
+    "raw": "Shoreditch - London, UK"
+  },
+  "geopoint": {
+    "lat": 51.5260411,
+    "lng": -0.0808002
+  }
+}

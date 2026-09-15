@@ -1,0 +1,12 @@
+{
+  "name": "Pizza Pilgrims - Finsbury Park",
+  "location": {
+    "city": "London",
+    "country": "UK",
+    "raw": "255 Seven Sisters Road, London, N4 2DD, England"
+  },
+  "geopoint": {
+    "lat": 51.56437832999999,
+    "lng": -0.10523332999999999
+  }
+}

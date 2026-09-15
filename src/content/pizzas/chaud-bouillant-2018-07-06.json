@@ -1,0 +1,8 @@
+{
+  "pizzaName": "Margherita",
+  "pizzeria": "chaud-bouillant",
+  "dateEaten": "2018-07-06",
+  "rating": 1,
+  "notes": "Well, pizza travelling, I guess better than nothing",
+  "photo": "./photos/chaud-bouillant-2018-07-06.webp"
+}

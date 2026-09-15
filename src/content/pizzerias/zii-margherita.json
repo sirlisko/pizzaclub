@@ -1,0 +1,12 @@
+{
+  "name": "Zii Margherita",
+  "location": {
+    "city": "Bologna",
+    "country": "IT",
+    "raw": "Via Guglielmo Oberdan 27A, 40126 Bologna, Italy"
+  },
+  "geopoint": {
+    "lat": 44.4973661,
+    "lng": 11.3460763
+  }
+}

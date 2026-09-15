@@ -1,0 +1,12 @@
+{
+  "name": "Icco",
+  "location": {
+    "city": "London",
+    "country": "UK",
+    "raw": "46 Goodge Street, London, W1T 4LU, England"
+  },
+  "geopoint": {
+    "lat": 51.5194121,
+    "lng": -0.1359536
+  }
+}

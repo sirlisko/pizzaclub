@@ -1,0 +1,11 @@
+{
+  "pizzaName": "Fiorentina",
+  "pizzeria": "il-guscio-2",
+  "dateEaten": "2016-04-25",
+  "rating": 3,
+  "price": {
+    "amount": 7.75,
+    "currency": "GBP"
+  },
+  "photo": "./photos/il-guscio-2016-04-25.webp"
+}

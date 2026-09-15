@@ -1,0 +1,12 @@
+{
+  "name": "Antica Pizzeria da Michele - Tokyo",
+  "location": {
+    "city": "Tokyo",
+    "country": "JP",
+    "raw": "Tokyo, JS"
+  },
+  "geopoint": {
+    "lat": 35.6768601,
+    "lng": 139.7638947
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Rudy's Pizza Napoletana - Shoreditch",
+  "location": {
+    "city": "London",
+    "country": "UK",
+    "raw": "188 Shoreditch High Street, London, E1 6HU, England"
+  },
+  "geopoint": {
+    "lat": 51.5242217,
+    "lng": -0.0775711
+  },
+  "favourite": true
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Antica Pizzeria da Michele",
+  "location": {
+    "city": "Baker Street, London",
+    "country": "UK",
+    "raw": "Baker Street, London - UK"
+  },
+  "geopoint": {
+    "lat": 51.5225853,
+    "lng": -0.1567431
+  }
+}

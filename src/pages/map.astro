@@ -1,0 +1,23 @@
+---
+import Layout from '../layouts/Layout.astro'
+import WorldMap from '../components/WorldMap.astro'
+import { getAllPizzerias } from '../lib/content'
+
+const pizzerias = await getAllPizzerias()
+const mapped = pizzerias.filter((p) => p.geopoint).length
+---
+
+<Layout title="Map | Pizza Club" description="Every pizzeria on the map.">
+  <p class="intro">
+    {mapped} of {pizzerias.length} pizzerias plotted below — click a marker to
+    see the place.
+  </p>
+  <WorldMap pizzerias={pizzerias} />
+</Layout>
+
+<style>
+  .intro {
+    margin: 0 0 var(--space-2);
+    padding: 0 var(--space-2);
+  }
+</style>

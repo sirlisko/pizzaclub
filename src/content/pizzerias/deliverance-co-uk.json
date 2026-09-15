@@ -1,0 +1,12 @@
+{
+  "name": "Deliverance.co.uk",
+  "location": {
+    "city": "Deliverance, London",
+    "country": "UK",
+    "raw": "Deliverance - London, UK"
+  },
+  "geopoint": {
+    "lat": 51.4976424,
+    "lng": -0.1151143
+  }
+}

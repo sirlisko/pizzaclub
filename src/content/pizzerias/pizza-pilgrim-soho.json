@@ -1,0 +1,12 @@
+{
+  "name": "Pizza Pilgrims - Soho",
+  "location": {
+    "city": "London",
+    "country": "UK",
+    "raw": "London - UK"
+  },
+  "geopoint": {
+    "lat": 51.5074456,
+    "lng": -0.1277653
+  }
+}

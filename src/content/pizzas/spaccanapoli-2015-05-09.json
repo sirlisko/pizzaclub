@@ -1,0 +1,11 @@
+{
+  "pizzaName": "Bufalina",
+  "pizzeria": "spaccanapoli",
+  "dateEaten": "2015-05-09",
+  "rating": 5,
+  "price": {
+    "raw": "24zl/£4"
+  },
+  "notes": "Kick Off 🍕",
+  "photo": "./photos/spaccanapoli-2015-05-09.webp"
+}

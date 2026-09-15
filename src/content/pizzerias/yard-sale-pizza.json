@@ -1,0 +1,12 @@
+{
+  "name": "Yard Sale Pizza",
+  "location": {
+    "city": "London",
+    "country": "UK",
+    "raw": "47A Blackstock Road, London, N4 2JF, England"
+  },
+  "geopoint": {
+    "lat": 51.563572,
+    "lng": -0.1027655
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "pizzaName": "Margherita (Bufala)",
+  "pizzeria": "regina-margherita",
+  "dateEaten": "2015-09-16",
+  "rating": 5,
+  "price": {
+    "amount": 8.5,
+    "currency": "EUR"
+  },
+  "photo": "./photos/regina-margherita-2015-09-16.webp"
+}

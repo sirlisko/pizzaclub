@@ -1,0 +1,11 @@
+{
+  "pizzaName": "Margherita (bufala)",
+  "pizzeria": "rosso-pomodoro",
+  "dateEaten": "2015-07-12",
+  "rating": 5,
+  "price": {
+    "amount": 11.95,
+    "currency": "GBP"
+  },
+  "photo": "./photos/rosso-pomodoro-2015-07-12.webp"
+}

@@ -1,0 +1,8 @@
+{
+  "pizzaName": "Margherita",
+  "pizzeria": "sud-italia",
+  "dateEaten": "2018-09-26",
+  "rating": 4,
+  "notes": "Always cheap and good",
+  "photo": "./photos/sud-italia-2018-09-26.webp"
+}

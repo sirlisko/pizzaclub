@@ -1,0 +1,12 @@
+{
+  "name": "NAP Pizza",
+  "location": {
+    "city": "Donostia / San Sebastián",
+    "country": "ES",
+    "raw": "Alderdi Eder parkea, Andia Kalea, 38, 20015 Donostia / San Sebastián, Gipuzkoa, Spain"
+  },
+  "geopoint": {
+    "lat": 43.3198114,
+    "lng": -1.9841676
+  }
+}

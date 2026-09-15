@@ -1,0 +1,8 @@
+{
+  "pizzaName": "Margherita",
+  "pizzeria": "made-of-dough",
+  "dateEaten": "2017-05-29",
+  "rating": 5,
+  "notes": "Really good for a street food pizza!",
+  "photo": "./photos/made-of-dough-2017-05-29.webp"
+}

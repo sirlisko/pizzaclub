@@ -1,0 +1,12 @@
+{
+  "name": "081 Pizzeria",
+  "location": {
+    "city": "London",
+    "country": "UK",
+    "raw": "119 Shoreditch High Street, London, E1 6HU, England"
+  },
+  "geopoint": {
+    "lat": 51.527245,
+    "lng": -0.07726383333333334
+  }
+}

@@ -3,6 +3,19 @@
 node_modules
 yarn-error.log
 
-# Build directory
-/public
+# Build directories
+dist
 .DS_Store
+
+# Astro
+.astro
+
+# Secrets
+.env
+.env.*
+
+# Local Netlify folder
+.netlify
+
+# Local Apple Photos import workspace (personal photos and locations)
+photo-import

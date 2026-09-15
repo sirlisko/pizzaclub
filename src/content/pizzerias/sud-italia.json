@@ -1,0 +1,12 @@
+{
+  "name": "Sud Italia",
+  "location": {
+    "city": "Spitalfields, London",
+    "country": "UK",
+    "raw": "Spitafields, London - UK"
+  },
+  "geopoint": {
+    "lat": 51.5195274,
+    "lng": -0.0751701
+  }
+}

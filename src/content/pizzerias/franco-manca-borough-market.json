@@ -1,0 +1,12 @@
+{
+  "name": "Franco Manca - Borough Market",
+  "location": {
+    "city": "London",
+    "country": "UK",
+    "raw": "Borough Market, 14 Winchester Walk, London, SE1 9AG, England"
+  },
+  "geopoint": {
+    "lat": 51.5063082,
+    "lng": -0.0914182
+  }
+}

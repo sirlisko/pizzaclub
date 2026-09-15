@@ -1,0 +1,12 @@
+{
+  "name": "La Dolce Vita",
+  "location": {
+    "city": "Caravate",
+    "country": "IT",
+    "raw": "Caravate, IT"
+  },
+  "geopoint": {
+    "lat": 45.8778934,
+    "lng": 8.6519892
+  }
+}

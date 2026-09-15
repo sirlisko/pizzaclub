@@ -1,0 +1,12 @@
+{
+  "name": "Crudough",
+  "location": {
+    "city": "London",
+    "country": "UK",
+    "raw": "1 Navigator Square, London, N19 3TD, England"
+  },
+  "geopoint": {
+    "lat": 51.5661808,
+    "lng": -0.1346844
+  }
+}

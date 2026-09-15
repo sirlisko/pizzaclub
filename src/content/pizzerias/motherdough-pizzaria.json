@@ -1,0 +1,12 @@
+{
+  "name": "Motherdough Pizzaria",
+  "location": {
+    "city": "London",
+    "country": "UK",
+    "raw": "12 Arrival Square, London, E1W 2AA, England"
+  },
+  "geopoint": {
+    "lat": 51.5084529,
+    "lng": -0.0663518
+  }
+}

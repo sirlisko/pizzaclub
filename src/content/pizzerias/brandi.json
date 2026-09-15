@@ -1,0 +1,12 @@
+{
+  "name": "Brandi",
+  "location": {
+    "city": "Naples",
+    "country": "IT",
+    "raw": "Salita Sant'Anna di Palazzo 30, 80132 Naples, Italy"
+  },
+  "geopoint": {
+    "lat": 40.8367467,
+    "lng": 14.2468974
+  }
+}

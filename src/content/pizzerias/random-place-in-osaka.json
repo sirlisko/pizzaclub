@@ -1,0 +1,12 @@
+{
+  "name": "Random place in Osaka",
+  "location": {
+    "city": "Osaka",
+    "country": "JP",
+    "raw": "Osaka, JS"
+  },
+  "geopoint": {
+    "lat": 34.6937569,
+    "lng": 135.5014539
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Antica Pizza",
+  "location": {
+    "city": "London",
+    "country": "UK",
+    "raw": "68 Heath Street, London, NW3 1DN, England"
+  },
+  "geopoint": {
+    "lat": 51.5574039,
+    "lng": -0.1781113
+  }
+}

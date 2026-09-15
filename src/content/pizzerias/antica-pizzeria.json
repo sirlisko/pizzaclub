@@ -1,0 +1,12 @@
+{
+  "name": "Antica Pizzeria",
+  "location": {
+    "city": "Hampstead, London",
+    "country": "UK",
+    "raw": "Hampstead, London - UK"
+  },
+  "geopoint": {
+    "lat": 51.55653,
+    "lng": -0.1783011
+  }
+}

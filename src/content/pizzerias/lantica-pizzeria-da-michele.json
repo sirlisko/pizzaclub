@@ -1,0 +1,12 @@
+{
+  "name": "L'Antica Pizzeria da Michele",
+  "location": {
+    "city": "Naples",
+    "country": "IT",
+    "raw": "Via Sant'Agostino alla Zecca 63, 80139 Naples, Italy"
+  },
+  "geopoint": {
+    "lat": 40.8497493,
+    "lng": 14.263352
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "pizzaName": "Margherita",
+  "pizzeria": "pizza-street",
+  "dateEaten": "2015-10-31",
+  "rating": 2,
+  "price": {
+    "amount": 6,
+    "currency": "GBP"
+  }
+}

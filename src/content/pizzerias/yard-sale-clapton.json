@@ -1,0 +1,12 @@
+{
+  "name": "Yard Sale - Clapton",
+  "location": {
+    "city": "Clapton, London",
+    "country": "UK",
+    "raw": "Clapton, London, UK"
+  },
+  "geopoint": {
+    "lat": 51.558602,
+    "lng": -0.0558777
+  }
+}

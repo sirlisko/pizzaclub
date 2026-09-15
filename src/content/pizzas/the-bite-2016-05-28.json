@@ -1,0 +1,8 @@
+{
+  "pizzaName": "Margherita",
+  "pizzeria": "the-bite",
+  "dateEaten": "2016-05-28",
+  "rating": 2,
+  "notes": "They used to be really good, lately they lost their touch.",
+  "photo": "./photos/the-bite-2016-05-28.webp"
+}

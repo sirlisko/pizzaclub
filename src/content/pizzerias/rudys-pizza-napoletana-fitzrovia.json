@@ -1,0 +1,12 @@
+{
+  "name": "Rudy's Pizza Napoletana - Fitzrovia",
+  "location": {
+    "city": "London",
+    "country": "UK",
+    "raw": "53-54 Tottenham Court Road, London, W1T 2EJ, England"
+  },
+  "geopoint": {
+    "lat": 51.5194911,
+    "lng": -0.1334572
+  }
+}

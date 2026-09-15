@@ -1,0 +1,7 @@
+{
+  "pizzaName": "Margherita",
+  "pizzeria": "la-piazzetta",
+  "dateEaten": "2023-12-31",
+  "rating": 2,
+  "photo": "./photos/la-piazzetta-2023-12-31.webp"
+}

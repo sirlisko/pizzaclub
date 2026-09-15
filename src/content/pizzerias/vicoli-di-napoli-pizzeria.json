@@ -1,0 +1,12 @@
+{
+  "name": "Vicoli di Napoli Pizzeria",
+  "location": {
+    "city": "London",
+    "country": "UK",
+    "raw": "167B Stoke Newington High Street, London, N16 0NY, England"
+  },
+  "geopoint": {
+    "lat": 51.56163333333333,
+    "lng": -0.07373049999999999
+  }
+}

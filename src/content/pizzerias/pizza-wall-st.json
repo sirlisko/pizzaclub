@@ -1,0 +1,12 @@
+{
+  "name": "Pizza Wall St.",
+  "location": {
+    "city": "Hackney, London",
+    "country": "UK",
+    "raw": "Hackney, London - UK"
+  },
+  "geopoint": {
+    "lat": 51.5432402,
+    "lng": -0.0493621
+  }
+}

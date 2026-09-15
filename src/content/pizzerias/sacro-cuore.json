@@ -1,0 +1,12 @@
+{
+  "name": "Sacro Cuore",
+  "location": {
+    "city": "Crouch Hill, London",
+    "country": "UK",
+    "raw": "Crouch Hill, London, UK"
+  },
+  "geopoint": {
+    "lat": 51.571431,
+    "lng": -0.1168739
+  }
+}

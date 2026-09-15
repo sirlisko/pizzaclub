@@ -1,0 +1,10 @@
+{
+  "pizzaName": "Fiorentina",
+  "pizzeria": "pizza-express",
+  "dateEaten": "2015-09-13",
+  "rating": 3,
+  "price": {
+    "amount": 10.1,
+    "currency": "GBP"
+  }
+}

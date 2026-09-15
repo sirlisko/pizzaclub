@@ -1,0 +1,12 @@
+{
+  "name": "Catanzaro",
+  "location": {
+    "city": "Marrakesh",
+    "country": "MA",
+    "raw": "Rue Tariq Bnou Ziad 44A, 40000 Marrakesh, Morocco"
+  },
+  "geopoint": {
+    "lat": 31.6349003,
+    "lng": -8.0104773
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Pizzeria Gino Sorbillo",
+  "location": {
+    "city": "Milan",
+    "country": "IT",
+    "raw": "Milano - IT"
+  },
+  "geopoint": {
+    "lat": 45.4641943,
+    "lng": 9.1896346
+  }
+}

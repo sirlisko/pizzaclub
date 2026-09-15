@@ -1,0 +1,256 @@
+---
+import { Image } from 'astro:assets'
+import Layout from '../../layouts/Layout.astro'
+import RatingSlices from '../../components/RatingSlices.astro'
+import {
+  getAllPizzaSlugs,
+  getPizzaBySlug,
+  getPizzasByPizzeria,
+  formatDate,
+  formatPrice,
+} from '../../lib/content'
+
+export async function getStaticPaths() {
+  const slugs = await getAllPizzaSlugs()
+  return slugs.map((slug) => ({ params: { slug } }))
+}
+
+const { slug } = Astro.params
+const pizza = await getPizzaBySlug(slug!)
+const price = pizza ? formatPrice(pizza.price) : null
+const photo = pizza?.photo
+const otherVisits = pizza
+  ? (await getPizzasByPizzeria(pizza.pizzeria._id)).filter(
+      (p) => p._id !== pizza._id
+    )
+  : []
+---
+
+<Layout
+  title={
+    pizza
+      ? `${pizza.pizzaName} — ${pizza.pizzeria.name} | Pizza Club`
+      : 'Not found | Pizza Club'
+  }
+  description={pizza?.notes}
+>
+  {pizza ? (
+    <article class="detail">
+      <a class="back" href="/">
+        ← Back to all pizzas
+      </a>
+      <h2>{pizza.pizzaName}</h2>
+      <a class="pizzeria" href={`/pizzeria/${pizza.pizzeria.slug}/`}>
+        {pizza.pizzeria.name}
+      </a>
+      <time class="date" datetime={pizza.dateEaten}>
+        {formatDate(pizza.dateEaten)}
+      </time>
+      {photo ? (
+        <button type="button" class="photo-trigger" data-open-photo aria-label="View full size photo">
+          <Image
+            class="photo"
+            src={photo}
+            alt={`${pizza.pizzaName} at ${pizza.pizzeria.name}`}
+            width={220}
+            height={220}
+            densities={[1, 2]}
+            fit="cover"
+            data-photo-img
+          />
+          <span class="photo-loader" data-photo-loader aria-hidden="true"></span>
+        </button>
+      ) : (
+        <img
+          class="photo photo--fallback"
+          src="/pizza.svg"
+          alt=""
+          width="200"
+          height="200"
+        />
+      )}
+      {photo && (
+        <dialog class="photo-dialog" data-photo-dialog>
+          <button type="button" class="photo-dialog__close" data-close-photo aria-label="Close">
+            ✕
+          </button>
+          <img
+            class="photo-dialog__img"
+            src={photo.src}
+            loading="lazy"
+            alt={`${pizza.pizzaName} at ${pizza.pizzeria.name}`}
+          />
+        </dialog>
+      )}
+      <RatingSlices rating={pizza.rating} />
+      <p class="location">
+        {pizza.pizzeria.location.city}, {pizza.pizzeria.location.country}
+      </p>
+      {price && <p class="price">{price}</p>}
+      {pizza.notes && <p class="notes">{pizza.notes}</p>}
+      {otherVisits.length > 0 && (
+        <p class="other-visits">
+          Also had{' '}
+          {otherVisits.length === 1
+            ? 'one other pizza'
+            : `${otherVisits.length} other pizzas`}{' '}
+          at {pizza.pizzeria.name} —{' '}
+          <a href={`/pizzeria/${pizza.pizzeria.slug}/`}>see them all</a>
+        </p>
+      )}
+    </article>
+  ) : (
+    <p>Couldn't find that pizza.</p>
+  )}
+</Layout>
+
+<style>
+  .detail {
+    max-width: 500px;
+    margin: 0 auto var(--space-5);
+    padding: 0 var(--space-2);
+  }
+  .back {
+    display: inline-block;
+    margin-bottom: var(--space-3);
+    text-decoration: none;
+    opacity: 0.85;
+  }
+  .pizzeria {
+    background: var(--color-surface);
+    color: var(--color-primary);
+    display: inline-block;
+    border-radius: 5px;
+    font-weight: bold;
+    text-decoration: none;
+    padding: var(--space-1) var(--space-2);
+    margin: var(--space-1) 0;
+  }
+  .pizzeria:hover {
+    text-decoration: underline;
+  }
+  .other-visits {
+    margin-top: var(--space-3);
+    opacity: 0.9;
+  }
+  .date {
+    display: block;
+    opacity: 0.85;
+  }
+  .photo {
+    display: block;
+    margin: var(--space-3) auto;
+    width: 220px;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 100%;
+    padding: 5px;
+    background: #e8e8e8;
+    color: transparent;
+  }
+  .photo--fallback {
+    padding: 30px;
+  }
+  .notes {
+    font-style: italic;
+    white-space: pre-line;
+    margin-top: var(--space-3);
+  }
+  .photo-trigger {
+    position: relative;
+    display: block;
+    margin: var(--space-3) auto;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: zoom-in;
+    border-radius: 100%;
+    border: solid 5px var(--color-surface);
+  }
+  .photo-trigger .photo {
+    margin: 0;
+  }
+  .photo-loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 32px;
+    height: 32px;
+    margin: -16px 0 0 -16px;
+    border: 3px solid var(--color-surface);
+    border-top-color: var(--color-primary);
+    border-radius: 100%;
+    animation: photo-loader-spin 0.8s linear infinite;
+    transition: opacity 0.15s ease;
+  }
+  .photo-loader.is-hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+  @keyframes photo-loader-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .photo-dialog {
+    max-width: min(90vw, 800px);
+    max-height: 90vh;
+    border: none;
+    border-radius: 8px;
+    padding: 0;
+    background: transparent;
+  }
+  .photo-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.75);
+  }
+  .photo-dialog__img {
+    display: block;
+    max-width: min(90vw, 800px);
+    max-height: 90vh;
+    width: auto;
+    height: auto;
+    border-radius: 8px;
+    background: #e8e8e8;
+    color: transparent;
+  }
+  .photo-dialog__close {
+    position: absolute;
+    top: var(--space-1);
+    right: var(--space-1);
+    width: 2rem;
+    height: 2rem;
+    border: none;
+    border-radius: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+</style>
+
+<script>
+  const trigger = document.querySelector('[data-open-photo]')
+  const dialog = document.querySelector<HTMLDialogElement>(
+    '[data-photo-dialog]'
+  )
+  const closeBtn = document.querySelector('[data-close-photo]')
+
+  trigger?.addEventListener('click', () => dialog?.showModal())
+  closeBtn?.addEventListener('click', () => dialog?.close())
+  dialog?.addEventListener('click', (event) => {
+    if (event.target === dialog) dialog.close()
+  })
+
+  const photoImg = document.querySelector<HTMLImageElement>('[data-photo-img]')
+  const photoLoader = document.querySelector('[data-photo-loader]')
+  const hidePhotoLoader = () => photoLoader?.classList.add('is-hidden')
+  if (photoImg) {
+    if (photoImg.complete) {
+      hidePhotoLoader()
+    } else {
+      photoImg.addEventListener('load', hidePhotoLoader)
+      photoImg.addEventListener('error', hidePhotoLoader)
+    }
+  }
+</script>

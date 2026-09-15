@@ -1,0 +1,38 @@
+---
+import Layout from '../layouts/Layout.astro'
+import PizzaCard from '../components/PizzaCard.astro'
+import SearchFilterBar from '../components/SearchFilterBar.astro'
+import { getAllPizzas } from '../lib/content'
+
+const pizzas = await getAllPizzas()
+const countries = [
+  ...new Set(pizzas.map((p) => p.pizzeria.location.country)),
+].sort()
+---
+
+<Layout>
+  <p class="counter">
+    <b>{pizzas.length}</b> Pizzas and counting...
+  </p>
+  <SearchFilterBar countries={countries} />
+  <ul id="pizza-grid" class="pizza-grid">
+    {pizzas.map((pizza) => (
+      <PizzaCard pizza={pizza} />
+    ))}
+  </ul>
+</Layout>
+
+<style>
+  .counter {
+    margin: 0 0 var(--space-2);
+  }
+  .pizza-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--space-3);
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 var(--space-2) var(--space-5);
+    list-style: none;
+  }
+</style>

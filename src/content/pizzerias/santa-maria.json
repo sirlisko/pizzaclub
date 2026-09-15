@@ -1,0 +1,12 @@
+{
+  "name": "Santa Maria",
+  "location": {
+    "city": "London",
+    "country": "UK",
+    "raw": "Tyndale Mansions, Upper Street, London, N1 2XG, England"
+  },
+  "geopoint": {
+    "lat": 51.542405,
+    "lng": -0.1032134
+  }
+}

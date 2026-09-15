@@ -1,0 +1,12 @@
+{
+  "name": "Japes",
+  "location": {
+    "city": "London",
+    "country": "UK",
+    "raw": "78 Dean Street, W1D 3SQ, England"
+  },
+  "geopoint": {
+    "lat": 51.5142235,
+    "lng": -0.1326681
+  }
+}

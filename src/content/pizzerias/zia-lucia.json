@@ -1,0 +1,12 @@
+{
+  "name": "Zia Lucia",
+  "location": {
+    "city": "Holloway, London",
+    "country": "UK",
+    "raw": "Holloway, London - UK"
+  },
+  "geopoint": {
+    "lat": 51.5572453,
+    "lng": -0.1183706
+  }
+}

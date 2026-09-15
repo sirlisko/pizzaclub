@@ -1,0 +1,12 @@
+{
+  "name": "Red Lion",
+  "location": {
+    "city": "London",
+    "country": "UK",
+    "raw": "Hoxton Square Gardens, Hoxton Square, London, N1 6PB, England"
+  },
+  "geopoint": {
+    "lat": 51.5280823,
+    "lng": -0.080238
+  }
+}

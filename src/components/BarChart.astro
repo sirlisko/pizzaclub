@@ -1,0 +1,74 @@
+---
+interface Props {
+  data: { label: string; value: number; href?: string }[]
+  format?: (value: number) => string
+}
+
+const { data, format = (v) => String(v) } = Astro.props
+const max = Math.max(...data.map((d) => d.value), 1)
+---
+
+<ul class="bar-chart">
+  {data.map((d) => (
+    <li class="bar-row">
+      {d.href ? (
+        <a class="bar-label" href={d.href} title={d.label}>
+          {d.label}
+        </a>
+      ) : (
+        <span class="bar-label" title={d.label}>
+          {d.label}
+        </span>
+      )}
+      <span class="bar-track">
+        <span class="bar-fill" style={`width: ${(d.value / max) * 100}%`} />
+      </span>
+      <span class="bar-value">{format(d.value)}</span>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .bar-chart {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+  .bar-row {
+    display: grid;
+    grid-template-columns: minmax(5rem, 12rem) 1fr 3.5rem;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: 0.9rem;
+  }
+  .bar-label {
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: inherit;
+    text-decoration: none;
+  }
+  a.bar-label:hover {
+    text-decoration: underline;
+  }
+  .bar-track {
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 4px;
+    height: 12px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    display: block;
+    height: 100%;
+    background: var(--color-surface);
+    border-radius: 4px;
+  }
+  .bar-value {
+    text-align: left;
+    opacity: 0.9;
+  }
+</style>

@@ -1,0 +1,12 @@
+{
+  "name": "La Piazzetta",
+  "location": {
+    "city": "Frabosa Soprana",
+    "country": "IT",
+    "raw": "Via Vittorio Emanuele III 1–3, 12082 Frabosa Soprana CN, Italy"
+  },
+  "geopoint": {
+    "lat": 44.2874666,
+    "lng": 7.8068833
+  }
+}

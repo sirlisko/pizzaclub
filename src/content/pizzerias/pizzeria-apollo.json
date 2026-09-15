@@ -1,0 +1,12 @@
+{
+  "name": "Pizzeria Apollo",
+  "location": {
+    "city": "Stoke Newington, London",
+    "country": "UK",
+    "raw": "Stoke Newington - London, UK"
+  },
+  "geopoint": {
+    "lat": 51.5573563,
+    "lng": -0.083815
+  }
+}

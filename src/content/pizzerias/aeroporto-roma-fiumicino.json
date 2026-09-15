@@ -1,0 +1,12 @@
+{
+  "name": "Aeroporto Roma Fiumicino",
+  "location": {
+    "city": "Roma",
+    "country": "IT",
+    "raw": "Roma, IT"
+  },
+  "geopoint": {
+    "lat": 41.8933203,
+    "lng": 12.4829321
+  }
+}

@@ -1,0 +1,159 @@
+---
+interface Props {
+  title?: string
+  description?: string
+}
+
+const {
+  title = 'Pizza Club',
+  description = "sirLisko's tasty Pizza Adventure by reviewing the best Pizza around the Globe.",
+} = Astro.props
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>{title}</title>
+    <meta name="author" content="Luca Lischetti" />
+    <meta name="description" content={description} />
+    <meta name="keywords" content="Pizza, Pizzeria, Pizza Club" />
+    <link rel="icon" href="/pizza.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Open+Sans:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    {import.meta.env.PROD && (
+      <script
+        defer
+        data-domain="pizzaclub.sirlisko.com"
+        src="https://plausible.io/js/script.js"
+      ></script>
+    )}
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="site-title" href="/">
+        <h1>Pizza Club</h1>
+      </a>
+      <p class="tagline">My tasty Pizza Adventure around the World.</p>
+      <nav class="site-nav">
+        <a href="/">List</a>
+        <a href="/map">Map</a>
+        <a href="/stats">Stats</a>
+      </nav>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <span>
+        Created with ♥ by <a href="https://sirlisko.com">Luca Lischetti</a>.
+      </span>
+      <span>
+        View project source on{' '}
+        <a href="https://github.com/sirlisko/pizzaclub">GitHub</a>.
+      </span>
+    </footer>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --color-primary: tomato;
+    --color-surface: #fff;
+    --color-text: #fff;
+    --font-heading: 'Oswald', sans-serif;
+    --font-body: 'Open Sans', sans-serif;
+    --space-1: 0.5rem;
+    --space-2: 1rem;
+    --space-3: 1.5rem;
+    --space-4: 2.5rem;
+    --space-5: 4.5rem;
+    --radius: 8px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--color-primary);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    text-align: center;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background-image: url('/pizza.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    opacity: 0.1;
+  }
+
+  a {
+    color: var(--color-text);
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-heading);
+    letter-spacing: 0.5px;
+  }
+</style>
+
+<style>
+  .site-header {
+    padding: var(--space-3) var(--space-2) var(--space-2);
+  }
+  .site-title {
+    text-decoration: none;
+  }
+  .site-title h1 {
+    margin: 0;
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+  }
+  .tagline {
+    margin: var(--space-1) 0 var(--space-2);
+    opacity: 0.9;
+  }
+  .site-nav {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-3);
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+  }
+  .site-nav a {
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    padding-bottom: 2px;
+  }
+  .site-nav a:hover {
+    border-bottom-color: currentColor;
+  }
+  .site-footer {
+    line-height: 1.6;
+    padding: var(--space-4) var(--space-2) var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+</style>

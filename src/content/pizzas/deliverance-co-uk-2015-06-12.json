@@ -1,0 +1,11 @@
+{
+  "pizzaName": "Margherita",
+  "pizzeria": "deliverance-co-uk",
+  "dateEaten": "2015-06-12",
+  "rating": 2,
+  "price": {
+    "amount": 9.7,
+    "currency": "GBP"
+  },
+  "photo": "./photos/deliverance-co-uk-2015-06-12.webp"
+}

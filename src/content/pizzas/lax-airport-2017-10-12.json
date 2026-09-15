@@ -1,0 +1,8 @@
+{
+  "pizzaName": "Margherita",
+  "pizzeria": "lax-airport",
+  "dateEaten": "2017-10-12",
+  "rating": 1,
+  "notes": "I know, I know, but I couldn't resist.",
+  "photo": "./photos/lax-airport-2017-10-12.webp"
+}

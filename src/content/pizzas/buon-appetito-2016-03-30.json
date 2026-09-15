@@ -1,0 +1,11 @@
+{
+  "pizzaName": "Fiorentina",
+  "pizzeria": "buon-appetito",
+  "dateEaten": "2016-03-30",
+  "rating": 2,
+  "price": {
+    "amount": 9,
+    "currency": "GBP"
+  },
+  "photo": "./photos/buon-appetito-2016-03-30.webp"
+}

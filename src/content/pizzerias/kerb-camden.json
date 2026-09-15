@@ -1,0 +1,12 @@
+{
+  "name": "Kerb - Camden",
+  "location": {
+    "city": "Camden, London",
+    "country": "UK",
+    "raw": "Camden, London, UK"
+  },
+  "geopoint": {
+    "lat": 51.5427966,
+    "lng": -0.1624803
+  }
+}

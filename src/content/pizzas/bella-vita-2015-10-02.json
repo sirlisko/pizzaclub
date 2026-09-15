@@ -1,0 +1,10 @@
+{
+  "pizzaName": "Fiorentina",
+  "pizzeria": "bella-vita",
+  "dateEaten": "2015-10-02",
+  "rating": 4,
+  "price": {
+    "amount": 7.95,
+    "currency": "GBP"
+  }
+}

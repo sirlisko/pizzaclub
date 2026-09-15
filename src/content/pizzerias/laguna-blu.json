@@ -1,0 +1,12 @@
+{
+  "name": "Laguna Blu",
+  "location": {
+    "city": "Leggiuno",
+    "country": "IT",
+    "raw": "Leggiuno, IT"
+  },
+  "geopoint": {
+    "lat": 45.875366,
+    "lng": 8.6204535
+  }
+}

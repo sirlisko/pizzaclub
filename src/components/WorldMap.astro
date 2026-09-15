@@ -1,0 +1,99 @@
+---
+import 'maplibre-gl/dist/maplibre-gl.css'
+import type { Pizzeria } from '../lib/content'
+
+interface Props {
+  pizzerias: (Pizzeria & { visits: number })[]
+}
+
+const { pizzerias } = Astro.props
+const points = pizzerias
+  .filter((p) => p.geopoint)
+  .map((p) => ({
+    slug: p.slug,
+    pizzeria: p.name,
+    city: p.location.city,
+    country: p.location.country,
+    visits: p.visits,
+    lat: p.geopoint!.lat,
+    lng: p.geopoint!.lng,
+  }))
+---
+
+<div id="map" class="map"></div>
+<script
+  type="application/json"
+  id="map-points"
+  set:html={JSON.stringify(points)}
+></script>
+<script>
+  import { Map, Marker, NavigationControl, setWorkerUrl } from 'maplibre-gl'
+  // Vite/Rollup don't reliably emit maplibre-gl's worker as a build asset on
+  // their own (it 404s at runtime otherwise), so import it explicitly as a
+  // URL and point maplibre at it.
+  import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'
+
+  setWorkerUrl(maplibreWorkerUrl)
+
+  const pointsEl = document.getElementById('map-points')
+  const points = JSON.parse(pointsEl?.textContent || '[]')
+
+  const map = new Map({
+    container: 'map',
+    style: 'https://tiles.openfreemap.org/styles/liberty',
+    projection: 'mercator', // flat map, not the default 3D globe
+    center: [10, 30],
+    zoom: 1.4,
+  })
+
+  map.addControl(new NavigationControl(), 'top-right')
+
+  map.on('load', () => {
+    for (const point of points) {
+      const el = document.createElement('a')
+      el.href = `/pizzeria/${point.slug}/`
+      el.className = 'map-marker'
+      const visitLabel =
+        point.visits === 1 ? '1 visit' : `${point.visits} visits`
+      el.title = `${point.pizzeria} — ${point.city}, ${point.country} (${visitLabel})`
+
+      new Marker({ element: el }).setLngLat([point.lng, point.lat]).addTo(map)
+    }
+  })
+
+  // The style's background layer paints before the actual tile data
+  // (water/land/roads) streams in, so revealing the canvas immediately
+  // shows a visible pop from flat background color to full map. Hide that
+  // behind a fade instead, triggered once the first frame is fully drawn.
+  map.once('idle', () => {
+    map.getContainer().classList.add('is-loaded')
+  })
+</script>
+
+<style>
+  .map {
+    width: 100%;
+    height: 70vh;
+    min-height: 420px;
+    /* Matches the map style's own background layer so there's no flash
+       from the page's tomato background before MapLibre paints. */
+    background-color: #f8f4f0;
+    opacity: 0;
+    transition: opacity 0.2s ease-in;
+  }
+
+  .map.is-loaded {
+    opacity: 1;
+  }
+
+  :global(.map-marker) {
+    display: block;
+    width: 16px;
+    height: 16px;
+    border-radius: 100%;
+    background: var(--color-primary, tomato);
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+  }
+</style>

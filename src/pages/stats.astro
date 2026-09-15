@@ -1,0 +1,118 @@
+---
+import Layout from '../layouts/Layout.astro'
+import BarChart from '../components/BarChart.astro'
+import { getAllPizzas } from '../lib/content'
+import {
+  topPizzerias,
+  personalFavourites,
+  countriesVisited,
+  pizzasPerYear,
+} from '../lib/stats'
+
+const pizzas = await getAllPizzas()
+const pizzerias = topPizzerias(pizzas)
+const favourites = personalFavourites(pizzas)
+const countries = countriesVisited(pizzas)
+const perYear = pizzasPerYear(pizzas)
+const overallAvg = pizzas.reduce((sum, p) => sum + p.rating, 0) / pizzas.length
+---
+
+<Layout
+  title="Stats | Pizza Club"
+  description="Pizza Club numbers: top pizzerias, countries visited, pizzas per year."
+>
+  <section class="headline-stats">
+    <div class="stat">
+      <span class="stat-value">{pizzas.length}</span>
+      <span class="stat-label">Pizzas eaten</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">{countries.length}</span>
+      <span class="stat-label">Countries visited</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">{overallAvg.toFixed(1)}</span>
+      <span class="stat-label">Average rating</span>
+    </div>
+  </section>
+
+  <section class="chart-section">
+    <h2>Top pizzerias</h2>
+    <BarChart
+      data={pizzerias.map((p) => ({
+        label: p.pizzeria,
+        href: `/pizzeria/${p.slug}/`,
+        value: p.rating,
+      }))}
+      format={(v) => `${v.toFixed(1)}/5`}
+    />
+  </section>
+
+  {favourites.length > 0 && (
+    <section class="chart-section">
+      <h2>Personal favourites</h2>
+      <p class="section-note">
+        Hand-picked call-outs, marked in Sanity — great regardless of how the
+        numbers rank them.
+      </p>
+      <BarChart
+        data={favourites.map((p) => ({
+          label: p.pizzeria,
+          href: `/pizzeria/${p.slug}/`,
+          value: p.rating,
+        }))}
+        format={(v) => `${v.toFixed(1)}/5`}
+      />
+    </section>
+  )}
+
+  <section class="chart-section">
+    <h2>Pizzas per year</h2>
+    <BarChart
+      data={perYear.map((y) => ({ label: String(y.year), value: y.count }))}
+    />
+  </section>
+
+  <section class="chart-section">
+    <h2>Countries visited</h2>
+    <p class="country-list">{countries.join(' · ')}</p>
+  </section>
+</Layout>
+
+<style>
+  .headline-stats {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-4);
+    margin: 0 0 var(--space-4);
+    flex-wrap: wrap;
+  }
+  .stat {
+    display: flex;
+    flex-direction: column;
+  }
+  .stat-value {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    font-weight: 700;
+  }
+  .stat-label {
+    opacity: 0.9;
+  }
+  .chart-section {
+    max-width: 500px;
+    margin: 0 auto var(--space-4);
+    padding: 0 var(--space-2);
+  }
+  .chart-section h2 {
+    margin-bottom: var(--space-2);
+  }
+  .section-note {
+    opacity: 0.8;
+    font-size: 0.85rem;
+    margin: calc(var(--space-2) * -1) 0 var(--space-2);
+  }
+  .country-list {
+    opacity: 0.9;
+  }
+</style>

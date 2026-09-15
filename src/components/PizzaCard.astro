@@ -1,0 +1,96 @@
+---
+import { Image } from 'astro:assets'
+import RatingSlices from './RatingSlices.astro'
+import { formatDate, formatPrice, type PizzaEntry } from '../lib/content'
+
+interface Props {
+  pizza: PizzaEntry
+  hidePizzeria?: boolean
+}
+
+const { pizza, hidePizzeria = false } = Astro.props
+const price = formatPrice(pizza.price)
+---
+
+<li
+  class="pizza"
+  data-pizzeria={pizza.pizzeria.name}
+  data-city={pizza.pizzeria.location.city}
+  data-country={pizza.pizzeria.location.country}
+  data-rating={pizza.rating}
+  data-date={pizza.dateEaten}
+  data-price={pizza.price?.amount ?? ''}
+>
+  <a href={`/pizza/${pizza.slug}/`} class="pizza__link">
+    {!hidePizzeria && <p class="pizza__pizzeria">{pizza.pizzeria.name}</p>}
+    <time class="pizza__date" datetime={pizza.dateEaten}>
+      {formatDate(pizza.dateEaten)}
+    </time>
+    {pizza.photo ? (
+      <Image
+        class="pizza__pic"
+        src={pizza.photo}
+        alt={`${pizza.pizzaName} at ${pizza.pizzeria.name}`}
+        width={140}
+        height={140}
+        densities={[1, 2]}
+        fit="cover"
+      />
+    ) : (
+      <img
+        class="pizza__pic pizza__pic--fallback"
+        src="/pizza.svg"
+        alt=""
+        width="140"
+        height="140"
+      />
+    )}
+    <RatingSlices rating={pizza.rating} />
+    <p class="pizza__location">
+      {pizza.pizzeria.location.city}, {pizza.pizzeria.location.country}
+    </p>
+    {price && <p class="pizza__price">{price}</p>}
+  </a>
+</li>
+
+<style>
+  .pizza {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .pizza__link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+  .pizza__pizzeria {
+    background: var(--color-surface);
+    border-radius: 5px;
+    color: var(--color-primary);
+    font-size: 1.1rem;
+    font-weight: bold;
+    padding: var(--space-1);
+    margin: 0 0 var(--space-1);
+  }
+  .pizza__date {
+    display: block;
+    margin-bottom: var(--space-1);
+    opacity: 0.85;
+  }
+  .pizza__pic {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 100%;
+    border: solid 4px var(--color-surface);
+    padding: 4px;
+  }
+  .pizza__pic--fallback {
+    padding: 20px;
+  }
+  .pizza__location,
+  .pizza__price {
+    margin: var(--space-1) 0 0;
+  }
+</style>

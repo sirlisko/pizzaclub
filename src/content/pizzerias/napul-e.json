@@ -1,0 +1,12 @@
+{
+  "name": "Napul'è",
+  "location": {
+    "city": "Como",
+    "country": "IT",
+    "raw": "Como - IT"
+  },
+  "geopoint": {
+    "lat": 45.9395857,
+    "lng": 9.1493609
+  }
+}

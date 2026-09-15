@@ -1,0 +1,12 @@
+{
+  "name": "Nap",
+  "location": {
+    "city": "Madrid",
+    "country": "ES",
+    "raw": "Calle de los Tres Peces, 1, 28012 Madrid, Spain"
+  },
+  "geopoint": {
+    "lat": 40.4108202,
+    "lng": -3.7005322
+  }
+}

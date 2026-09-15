@@ -1,0 +1,11 @@
+{
+  "pizzaName": "Fiorentina",
+  "pizzeria": "il-monte",
+  "dateEaten": "2015-11-01",
+  "rating": 3,
+  "price": {
+    "amount": 7.99,
+    "currency": "GBP"
+  },
+  "photo": "./photos/il-monte-2015-11-01.webp"
+}

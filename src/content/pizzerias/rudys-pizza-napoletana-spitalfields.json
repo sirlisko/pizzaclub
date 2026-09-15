@@ -1,0 +1,12 @@
+{
+  "name": "Rudy's Pizza Napoletana - Spitalfields",
+  "location": {
+    "city": "London",
+    "country": "UK",
+    "raw": "Spitalfields, 27 Spital Square, London, E1 6DX, England"
+  },
+  "geopoint": {
+    "lat": 51.5205081,
+    "lng": -0.0773321
+  }
+}

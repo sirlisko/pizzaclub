@@ -1,0 +1,12 @@
+{
+  "name": "Purezza",
+  "location": {
+    "city": "London",
+    "country": "UK",
+    "raw": "47 Parkway, London, NW1 7PN, England"
+  },
+  "geopoint": {
+    "lat": 51.5380389,
+    "lng": -0.1443265
+  }
+}

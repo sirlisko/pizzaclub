@@ -1,0 +1,12 @@
+{
+  "name": "Dusty Knuckle @ Chepstow Castle",
+  "location": {
+    "city": "Cardiff",
+    "country": "UK",
+    "raw": "Cardiff - UK"
+  },
+  "geopoint": {
+    "lat": 51.4816546,
+    "lng": -3.1791934
+  }
+}

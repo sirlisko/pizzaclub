@@ -1,0 +1,12 @@
+{
+  "name": "Indo Bar",
+  "location": {
+    "city": "Whitechapel, London",
+    "country": "UK",
+    "raw": "Whitechapel, London, UK"
+  },
+  "geopoint": {
+    "lat": 51.5174861,
+    "lng": -0.0659685
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "???",
+  "location": {
+    "city": "Sardegna",
+    "country": "IT",
+    "raw": "Sardegna - IT"
+  },
+  "geopoint": {
+    "lat": 40.0912813,
+    "lng": 9.0305773
+  }
+}

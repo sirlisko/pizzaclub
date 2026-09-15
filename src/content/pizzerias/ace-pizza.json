@@ -1,0 +1,12 @@
+{
+  "name": "Ace Pizza",
+  "location": {
+    "city": "London",
+    "country": "UK",
+    "raw": "238A Davina House, Dalston Lane, London, E8 1LQ, England"
+  },
+  "geopoint": {
+    "lat": 51.5493559,
+    "lng": -0.0592884
+  }
+}

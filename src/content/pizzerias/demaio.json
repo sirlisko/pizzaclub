@@ -1,0 +1,12 @@
+{
+  "name": "Demaio",
+  "location": {
+    "city": "Bilbao",
+    "country": "ES",
+    "raw": "Calle de San Francisco, 10, 48003 Bilbao, Bizkaia, Spain"
+  },
+  "geopoint": {
+    "lat": 43.2552057,
+    "lng": -2.9260333
+  }
+}

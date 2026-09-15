@@ -1,0 +1,12 @@
+{
+  "name": "Rudy's Pizza Napoletana - Soho",
+  "location": {
+    "city": "London",
+    "country": "UK",
+    "raw": "80-82 Wardour Street, W1F 0UN, England"
+  },
+  "geopoint": {
+    "lat": 51.5131788,
+    "lng": -0.1336466
+  }
+}

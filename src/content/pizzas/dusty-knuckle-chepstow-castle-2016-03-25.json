@@ -1,0 +1,12 @@
+{
+  "pizzaName": "Margherita",
+  "pizzeria": "dusty-knuckle-chepstow-castle",
+  "dateEaten": "2016-03-25",
+  "rating": 5,
+  "price": {
+    "amount": 5,
+    "currency": "GBP"
+  },
+  "notes": "Pleasent surprise in Wales 🏴󠁧󠁢󠁷󠁬󠁳󠁿.",
+  "photo": "./photos/dusty-knuckle-chepstow-castle-2016-03-25.webp"
+}

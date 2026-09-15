@@ -1,0 +1,12 @@
+{
+  "name": "FrancoManca",
+  "location": {
+    "city": "Broadwey Market, London",
+    "country": "UK",
+    "raw": "Broadwey Market - London, UK"
+  },
+  "geopoint": {
+    "lat": 51.5368082,
+    "lng": -0.0616584
+  }
+}

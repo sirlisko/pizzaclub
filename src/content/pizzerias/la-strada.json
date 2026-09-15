@@ -1,0 +1,12 @@
+{
+  "name": "La Strada",
+  "location": {
+    "city": "València",
+    "country": "ES",
+    "raw": "Carrer de la Conquista, 4, 46001 València, Valencia, Spain"
+  },
+  "geopoint": {
+    "lat": 39.4762318,
+    "lng": -0.3814506
+  }
+}

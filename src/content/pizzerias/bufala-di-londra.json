@@ -1,0 +1,12 @@
+{
+  "name": "Bufala di Londra",
+  "location": {
+    "city": "London",
+    "country": "UK",
+    "raw": "18B Topsfield Parade, Tottenham Lane, London, N8 8PR, England"
+  },
+  "geopoint": {
+    "lat": 51.5801445,
+    "lng": -0.1233136
+  }
+}

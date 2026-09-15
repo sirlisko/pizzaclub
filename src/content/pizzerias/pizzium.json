@@ -1,0 +1,12 @@
+{
+  "name": "Pizzium",
+  "location": {
+    "city": "Como",
+    "country": "IT",
+    "raw": "Viale Papa Innocenzo XI 51, 22100 Como, Italy"
+  },
+  "geopoint": {
+    "lat": 45.8070297,
+    "lng": 9.0778999
+  }
+}

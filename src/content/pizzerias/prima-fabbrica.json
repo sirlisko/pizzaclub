@@ -1,0 +1,12 @@
+{
+  "name": "Prima Fabbrica",
+  "location": {
+    "city": "Toulouse",
+    "country": "FR",
+    "raw": "2–6 Rue de la Pomme, 31000 Toulouse, France"
+  },
+  "geopoint": {
+    "lat": 43.60238,
+    "lng": 1.4475031
+  }
+}

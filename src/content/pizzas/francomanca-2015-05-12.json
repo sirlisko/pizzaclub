@@ -1,0 +1,11 @@
+{
+  "pizzaName": "Margherita",
+  "pizzeria": "francomanca",
+  "dateEaten": "2015-05-12",
+  "rating": 5,
+  "price": {
+    "amount": 5.9,
+    "currency": "GBP"
+  },
+  "photo": "./photos/francomanca-2015-05-12.webp"
+}

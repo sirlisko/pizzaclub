@@ -1,0 +1,12 @@
+{
+  "name": "O sole mio",
+  "location": {
+    "city": "Seveso",
+    "country": "IT",
+    "raw": "Via Preposto Mezzera 18, 20822 Seveso MB, Italy"
+  },
+  "geopoint": {
+    "lat": 45.6423474,
+    "lng": 9.1389422
+  }
+}

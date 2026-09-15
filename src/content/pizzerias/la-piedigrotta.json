@@ -1,0 +1,12 @@
+{
+  "name": "La Piedigrotta",
+  "location": {
+    "city": "Varese",
+    "country": "IT",
+    "raw": "Via Gian Domenico Romagnosi 9, 21100 Varese, Italy"
+  },
+  "geopoint": {
+    "lat": 45.8182161,
+    "lng": 8.82598
+  }
+}

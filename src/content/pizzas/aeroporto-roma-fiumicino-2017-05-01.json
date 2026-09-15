@@ -1,0 +1,8 @@
+{
+  "pizzaName": "Margherita",
+  "pizzeria": "aeroporto-roma-fiumicino",
+  "dateEaten": "2017-05-01",
+  "rating": 5,
+  "notes": "30 mins in Italy, 1 Pizza.",
+  "photo": "./photos/aeroporto-roma-fiumicino-2017-05-01.webp"
+}

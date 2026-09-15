@@ -1,0 +1,12 @@
+{
+  "name": "Pizza Express",
+  "location": {
+    "city": "Soho, London",
+    "country": "UK",
+    "raw": "Soho - London, UK"
+  },
+  "geopoint": {
+    "lat": 51.5133314,
+    "lng": -0.1361266
+  }
+}

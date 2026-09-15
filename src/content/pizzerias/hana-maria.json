@@ -1,0 +1,12 @@
+{
+  "name": "Hana Maria",
+  "location": {
+    "city": "Finsbury Park, London",
+    "country": "UK",
+    "raw": "Finsbury Park, London - UK"
+  },
+  "geopoint": {
+    "lat": 51.5648345,
+    "lng": -0.1064144
+  }
+}

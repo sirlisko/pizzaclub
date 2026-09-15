@@ -1,0 +1,12 @@
+{
+  "name": "Chaud-Bouillant",
+  "location": {
+    "city": "Cassis",
+    "country": "FR",
+    "raw": "9–13 Avenue Docteur Emmanuel Agostini, 13260 Cassis, France"
+  },
+  "geopoint": {
+    "lat": 43.2150777,
+    "lng": 5.5392519
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Bank of Friendship",
+  "location": {
+    "city": "London",
+    "country": "UK",
+    "raw": "2 Conewood Street, London, N5 1DL, England"
+  },
+  "geopoint": {
+    "lat": 51.5583351,
+    "lng": -0.0987654
+  }
+}

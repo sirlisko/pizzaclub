@@ -1,0 +1,8 @@
+{
+  "pizzaName": "Margherita",
+  "pizzeria": "la-dolce-vita",
+  "dateEaten": "2015-09-21",
+  "rating": 5,
+  "notes": "taste of childhood.",
+  "photo": "./photos/la-dolce-vita-2015-09-21.webp"
+}

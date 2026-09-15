@@ -1,0 +1,12 @@
+{
+  "name": "Pizza Pilgrims - Shoreditch",
+  "location": {
+    "city": "Shoreditch, London",
+    "country": "UK",
+    "raw": "Shoreditch, London, UK"
+  },
+  "geopoint": {
+    "lat": 51.5266694,
+    "lng": -0.0798926
+  }
+}
