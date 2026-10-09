@@ -45,15 +45,6 @@ export async function getAllPizzas(): Promise<PizzaEntry[]> {
   return pizzas.sort((a, b) => b.dateEaten.localeCompare(a.dateEaten))
 }
 
-export async function getAllPizzaSlugs(): Promise<string[]> {
-  return (await getCollection('pizzas')).map((p) => p.id)
-}
-
-export async function getPizzaBySlug(slug: string): Promise<PizzaEntry | null> {
-  const pizza = await getEntry('pizzas', slug)
-  return pizza ? toPizza(pizza) : null
-}
-
 export async function getAllPizzerias(): Promise<
   (Pizzeria & { visits: number })[]
 > {
