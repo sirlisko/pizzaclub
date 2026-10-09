@@ -1,10 +1,10 @@
 {
-  "name": "Pizza Pilgrim",
-  "chain": "Pizza Pilgrim",
+  "name": "Pizza Pilgrims - Kingly Street",
+  "chain": "Pizza Pilgrims",
   "location": {
-    "city": "Kings st, London",
+    "city": "Kingly Street, London",
     "country": "UK",
-    "raw": "Kings st, London, UK"
+    "raw": "Kingly Street, London - UK"
   },
   "geopoint": {
     "lat": 51.530609,

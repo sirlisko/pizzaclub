@@ -1,10 +1,10 @@
 {
-  "name": "FrancoManca",
+  "name": "Franco Manca - Broadway Market",
   "chain": "Franco Manca",
   "location": {
-    "city": "Broadwey Market, London",
+    "city": "Broadway Market, London",
     "country": "UK",
-    "raw": "Broadwey Market - London, UK"
+    "raw": "Broadway Market - London, UK"
   },
   "geopoint": {
     "lat": 51.5368082,
