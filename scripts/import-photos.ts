@@ -30,6 +30,7 @@ type ReviewVisit = {
 
 type Pizzeria = {
   name: string
+  chain?: string
   location: { city: string; country: string; raw?: string }
   geopoint?: { lat: number; lng: number }
 }
@@ -82,6 +83,11 @@ for (const f of readdirSync(pizzeriasDir)) {
   pizzerias.set(path.basename(f, '.json'), readJson(path.join(pizzeriasDir, f)))
 }
 const slugByName = new Map([...pizzerias].map(([slug, p]) => [p.name, slug]))
+// A new "Franco Manca - X" or "Franco Manca" joins the chain of the existing Franco Manca branches.
+const baseName = (name: string) => name.split(' - ')[0].trim().toLowerCase()
+const chainByBaseName = new Map(
+  [...pizzerias.values()].filter((p) => p.chain).map((p) => [baseName(p.name), p.chain!])
+)
 
 const visits: ReviewVisit[] = readJson(path.resolve(reviewPath)).filter(
   (v: ReviewVisit) => v.pizzeria && v.rating !== '' && !imported.includes(v.id)
@@ -97,8 +103,10 @@ for (const visit of visits) {
   if (!pizzerias.has(pizzeriaSlug) && !newPizzerias.has(pizzeriaSlug)) {
     const place = places[visit.id] ?? {}
     const cc = place.address?.iso_country_code ?? ''
+    const chain = chainByBaseName.get(baseName(name))
     newPizzerias.set(pizzeriaSlug, {
       name,
+      ...(chain && { chain }),
       location: { city: place.address?.city ?? '', country: cc === 'GB' ? 'UK' : cc, raw: place.address_str ?? '' },
       ...(geo && { geopoint: geo }),
     })
@@ -114,7 +122,7 @@ for (const visit of visits) {
 
 for (const [slug, p] of newPizzerias) {
   const missing = !p.location.city || !p.location.country ? '  ⚠ missing city/country' : ''
-  console.log(`NEW PIZZERIA ${slug}: ${p.name} — ${p.location.city}, ${p.location.country}${p.geopoint ? '' : '  ⚠ no map location'}${missing}`)
+  console.log(`NEW PIZZERIA ${slug}: ${p.name}${p.chain ? ` [chain: ${p.chain}]` : ''} — ${p.location.city}, ${p.location.country}${p.geopoint ? '' : '  ⚠ no map location'}${missing}`)
 }
 for (const e of entries) {
   console.log(`${e.visit.date}  ${pizzerias.get(e.pizzeriaSlug)?.name ?? newPizzerias.get(e.pizzeriaSlug)!.name}  |  ${e.pizzaName}${e.guessed ? ' (guessed)' : ''}  |  ${e.visit.rating}/5`)
