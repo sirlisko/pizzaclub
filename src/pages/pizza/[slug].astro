@@ -1,174 +1,232 @@
 ---
 import { Image } from 'astro:assets'
 import Layout from '../../layouts/Layout.astro'
-import RatingSlices from '../../components/RatingSlices.astro'
+import RatingRing from '../../components/RatingRing.astro'
 import {
-  getAllPizzaSlugs,
-  getPizzaBySlug,
+  getAllPizzas,
   getPizzasByPizzeria,
-  formatDate,
   formatPrice,
+  type PizzaEntry,
 } from '../../lib/content'
 
 export async function getStaticPaths() {
-  const slugs = await getAllPizzaSlugs()
-  return slugs.map((slug) => ({ params: { slug } }))
+  // Newest first, so the previous entry in the list is the later visit.
+  const pizzas = await getAllPizzas()
+  return pizzas.map((pizza, i) => ({
+    params: { slug: pizza.slug },
+    props: { pizza, later: pizzas[i - 1], earlier: pizzas[i + 1] },
+  }))
 }
 
-const { slug } = Astro.params
-const pizza = await getPizzaBySlug(slug!)
-const price = pizza ? formatPrice(pizza.price) : null
-const photo = pizza?.photo
-const otherVisits = pizza
-  ? (await getPizzasByPizzeria(pizza.pizzeria._id)).filter(
-      (p) => p._id !== pizza._id
-    )
-  : []
+interface Props {
+  pizza: PizzaEntry
+  later?: PizzaEntry
+  earlier?: PizzaEntry
+}
+
+const { pizza, later, earlier } = Astro.props
+const price = formatPrice(pizza.price)
+const photo = pizza.photo
+const alt = `${pizza.pizzaName} at ${pizza.pizzeria.name}`
+const longDate = new Date(pizza.dateEaten).toLocaleDateString('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+})
+const otherVisits = (await getPizzasByPizzeria(pizza.pizzeria._id)).filter(
+  (p) => p._id !== pizza._id
+)
 ---
 
 <Layout
-  title={
-    pizza
-      ? `${pizza.pizzaName} — ${pizza.pizzeria.name} | Pizza Club`
-      : 'Not found | Pizza Club'
-  }
-  description={pizza?.notes}
+  title={`${pizza.pizzaName} at ${pizza.pizzeria.name} | Pizza Club`}
+  description={pizza.notes}
 >
-  {pizza ? (
+  <div class="page">
     <article class="detail">
-      <a class="back" href="/">
-        ← Back to all pizzas
-      </a>
-      <h2>{pizza.pizzaName}</h2>
-      <a class="pizzeria" href={`/pizzeria/${pizza.pizzeria.slug}/`}>
-        {pizza.pizzeria.name}
-      </a>
-      <time class="date" datetime={pizza.dateEaten}>
-        {formatDate(pizza.dateEaten)}
-      </time>
       {photo ? (
-        <button type="button" class="photo-trigger" data-open-photo aria-label="View full size photo">
-          <Image
-            class="photo"
-            src={photo}
-            alt={`${pizza.pizzaName} at ${pizza.pizzeria.name}`}
-            width={220}
-            height={220}
-            densities={[1, 2]}
-            fit="cover"
-            data-photo-img
-          />
-          <span class="photo-loader" data-photo-loader aria-hidden="true"></span>
+        <button
+          type="button"
+          class="photo-trigger"
+          data-open-photo
+          aria-label="View full size photo"
+        >
+          <RatingRing rating={pizza.rating} class="detail__ring">
+            <Image
+              src={photo}
+              alt={alt}
+              width={496}
+              height={496}
+              densities={[1, 2]}
+              fit="cover"
+              data-photo-img
+            />
+          </RatingRing>
+          <span
+            class="photo-loader"
+            data-photo-loader
+            aria-hidden="true"
+          ></span>
         </button>
       ) : (
-        <img
-          class="photo photo--fallback"
-          src="/pizza.svg"
-          alt=""
-          width="200"
-          height="200"
-        />
+        <RatingRing rating={pizza.rating} class="detail__ring" />
       )}
-      {photo && (
-        <dialog class="photo-dialog" data-photo-dialog>
-          <button type="button" class="photo-dialog__close" data-close-photo aria-label="Close">
-            ✕
-          </button>
-          <img
-            class="photo-dialog__img"
-            src={photo.src}
-            loading="lazy"
-            alt={`${pizza.pizzaName} at ${pizza.pizzeria.name}`}
-          />
-        </dialog>
-      )}
-      <RatingSlices rating={pizza.rating} />
-      <p class="location">
-        {pizza.pizzeria.location.city}, {pizza.pizzeria.location.country}
-      </p>
-      {price && <p class="price">{price}</p>}
-      {pizza.notes && <p class="notes">{pizza.notes}</p>}
-      {otherVisits.length > 0 && (
-        <p class="other-visits">
-          Also had{' '}
-          {otherVisits.length === 1
-            ? 'one other pizza'
-            : `${otherVisits.length} other pizzas`}{' '}
-          at {pizza.pizzeria.name} —{' '}
-          <a href={`/pizzeria/${pizza.pizzeria.slug}/`}>see them all</a>
+
+      <div class="detail__text">
+        <h1>{pizza.pizzaName}</h1>
+        <p class="detail__facts">
+          <a href={`/pizzeria/${pizza.pizzeria.slug}/`}>
+            {pizza.pizzeria.name}
+          </a>{' '}
+          in {pizza.pizzeria.location.city}, {pizza.pizzeria.location.country}
+          <br />
+          <time datetime={pizza.dateEaten}>{longDate}</time>, rated{' '}
+          {pizza.rating} out of 5{price && `, ${price}`}
         </p>
-      )}
+        {pizza.notes && (
+          <blockquote class="detail__notes">{pizza.notes}</blockquote>
+        )}
+        {otherVisits.length > 0 && (
+          <p class="detail__other">
+            <a href={`/pizzeria/${pizza.pizzeria.slug}/`}>
+              {otherVisits.length === 1
+                ? `1 more pizza at ${pizza.pizzeria.name}`
+                : `${otherVisits.length} more pizzas at ${pizza.pizzeria.name}`}
+            </a>
+          </p>
+        )}
+      </div>
     </article>
-  ) : (
-    <p>Couldn't find that pizza.</p>
-  )}
+
+    {photo && (
+      <dialog class="photo-dialog" data-photo-dialog>
+        <button
+          type="button"
+          class="photo-dialog__close"
+          data-close-photo
+          aria-label="Close"
+        >
+          ✕
+        </button>
+        <img
+          class="photo-dialog__img"
+          src={photo.src}
+          loading="lazy"
+          alt={alt}
+        />
+      </dialog>
+    )}
+
+    <nav class="sequence" aria-label="More pizzas">
+      {earlier && (
+        <a href={`/pizza/${earlier.slug}/`} class="sequence__link">
+          <span class="sequence__label">Earlier</span>
+          <span class="sequence__name">
+            {earlier.pizzaName} at {earlier.pizzeria.name}
+          </span>
+        </a>
+      )}
+      {later && (
+        <a
+          href={`/pizza/${later.slug}/`}
+          class="sequence__link sequence__link--later"
+        >
+          <span class="sequence__label">Later</span>
+          <span class="sequence__name">
+            {later.pizzaName} at {later.pizzeria.name}
+          </span>
+        </a>
+      )}
+    </nav>
+  </div>
 </Layout>
 
 <style>
   .detail {
-    max-width: 500px;
-    margin: 0 auto var(--space-5);
-    padding: 0 var(--space-2);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4) 3.5rem;
+    padding: var(--space-4) 0 var(--space-5);
   }
-  .back {
-    display: inline-block;
-    margin-bottom: var(--space-3);
-    text-decoration: none;
-    opacity: 0.85;
+  .photo-trigger,
+  .detail > :global(.detail__ring) {
+    flex: 1 1 22rem;
+    max-width: 32.5rem;
   }
-  .pizzeria {
-    background: var(--color-surface);
-    color: var(--color-primary);
-    display: inline-block;
-    border-radius: 5px;
-    font-weight: bold;
-    text-decoration: none;
-    padding: var(--space-1) var(--space-2);
-    margin: var(--space-1) 0;
+  .detail :global(.detail__ring) {
+    --ring-width: 12px;
+    --ring-gap: 7px;
   }
-  .pizzeria:hover {
-    text-decoration: underline;
+  .detail__text {
+    flex: 1 1 26rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    max-width: 37.5rem;
   }
-  .other-visits {
-    margin-top: var(--space-3);
-    opacity: 0.9;
+  .detail__text h1 {
+    margin: 0;
+    font-size: clamp(4rem, 10vw, 8.5rem);
+    line-height: 0.88;
+    overflow-wrap: anywhere;
   }
-  .date {
-    display: block;
-    opacity: 0.85;
+  .detail__facts {
+    margin: 0;
+    font-size: 1.375rem;
+    font-weight: 500;
+    line-height: 1.35;
   }
-  .photo {
-    display: block;
-    margin: var(--space-3) auto;
-    width: 220px;
-    height: 220px;
-    object-fit: cover;
-    border-radius: 100%;
-    padding: 5px;
-    background: #e8e8e8;
-    color: transparent;
-  }
-  .photo--fallback {
-    padding: 30px;
-  }
-  .notes {
-    font-style: italic;
+  .detail__notes {
+    margin: 0.75rem 0 0;
+    max-width: 26ch;
+    font-size: clamp(1.5rem, 2.6vw, 1.875rem);
+    font-stretch: 85%;
+    line-height: 1.3;
     white-space: pre-line;
-    margin-top: var(--space-3);
+  }
+  .detail__other {
+    margin: 0;
+  }
+  .sequence {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding-top: var(--space-4);
+    border-top: 1px solid rgb(255 253 249 / 0.3);
+  }
+  .sequence__link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    max-width: 30rem;
+    text-decoration: none;
+  }
+  .sequence__link--later {
+    margin-left: auto;
+    text-align: right;
+  }
+  .sequence__label {
+    color: var(--color-ink-muted);
+  }
+  .sequence__name {
+    font-size: 1.375rem;
+    font-weight: 800;
+    font-stretch: 70%;
+    line-height: 1.15;
+  }
+  .sequence__link:hover .sequence__name {
+    text-decoration: underline;
   }
   .photo-trigger {
     position: relative;
     display: block;
-    margin: var(--space-3) auto;
     padding: 0;
     border: none;
+    border-radius: 50%;
     background: none;
     cursor: zoom-in;
-    border-radius: 100%;
-    border: solid 5px var(--color-surface);
-  }
-  .photo-trigger .photo {
-    margin: 0;
   }
   .photo-loader {
     position: absolute;
@@ -177,8 +235,8 @@ const otherVisits = pizza
     width: 32px;
     height: 32px;
     margin: -16px 0 0 -16px;
-    border: 3px solid var(--color-surface);
-    border-top-color: var(--color-primary);
+    border: 3px solid var(--color-ink);
+    border-top-color: var(--color-ground);
     border-radius: 100%;
     animation: photo-loader-spin 0.8s linear infinite;
     transition: opacity 0.15s ease;
@@ -201,7 +259,7 @@ const otherVisits = pizza
     background: transparent;
   }
   .photo-dialog::backdrop {
-    background: rgba(0, 0, 0, 0.75);
+    background: rgb(0 0 0 / 0.75);
   }
   .photo-dialog__img {
     display: block;
@@ -217,11 +275,11 @@ const otherVisits = pizza
     position: absolute;
     top: var(--space-1);
     right: var(--space-1);
-    width: 2rem;
-    height: 2rem;
+    width: 2.75rem;
+    height: 2.75rem;
     border: none;
     border-radius: 100%;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgb(0 0 0 / 0.6);
     color: #fff;
     font-size: 1rem;
     line-height: 1;

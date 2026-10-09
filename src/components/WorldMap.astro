@@ -28,38 +28,115 @@ const points = pizzerias
 ></script>
 <script>
   import { Map, Marker, NavigationControl, setWorkerUrl } from 'maplibre-gl'
+  import Supercluster from 'supercluster'
   // Vite/Rollup don't reliably emit maplibre-gl's worker as a build asset on
   // their own (it 404s at runtime otherwise), so import it explicitly as a
   // URL and point maplibre at it.
   import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'
+  import { pizzaClubStyle } from '../lib/mapStyle'
 
   setWorkerUrl(maplibreWorkerUrl)
 
+  type Point = {
+    slug: string
+    pizzeria: string
+    city: string
+    country: string
+    visits: number
+    lat: number
+    lng: number
+  }
+
   const pointsEl = document.getElementById('map-points')
-  const points = JSON.parse(pointsEl?.textContent || '[]')
+  const points: Point[] = JSON.parse(pointsEl?.textContent || '[]')
 
   const map = new Map({
     container: 'map',
-    style: 'https://tiles.openfreemap.org/styles/liberty',
     projection: 'mercator', // flat map, not the default 3D globe
     center: [10, 30],
     zoom: 1.4,
+    attributionControl: { compact: true },
+  })
+  // Recoloured before the first paint, so the stock style never flashes.
+  map.setStyle('https://tiles.openfreemap.org/styles/liberty', {
+    transformStyle: pizzaClubStyle,
   })
 
   map.addControl(new NavigationControl(), 'top-right')
 
-  map.on('load', () => {
-    for (const point of points) {
-      const el = document.createElement('a')
-      el.href = `/pizzeria/${point.slug}/`
-      el.className = 'map-marker'
-      const visitLabel =
-        point.visits === 1 ? '1 visit' : `${point.visits} visits`
-      el.title = `${point.pizzeria} — ${point.city}, ${point.country} (${visitLabel})`
+  // Clustered here rather than through a MapLibre cluster source: those draw
+  // on the canvas, where markers can't be tabbed to or carry links.
+  const index = new Supercluster<Point>({ radius: 32, maxZoom: 16 })
+  index.load(
+    points.map((point) => ({
+      type: 'Feature',
+      properties: point,
+      geometry: { type: 'Point', coordinates: [point.lng, point.lat] },
+    }))
+  )
 
-      new Marker({ element: el }).setLngLat([point.lng, point.lat]).addTo(map)
+  function pizzeriaMarker(point: Point) {
+    const el = document.createElement('a')
+    el.href = `/pizzeria/${point.slug}/`
+    el.className = 'map-marker'
+    const visitLabel = point.visits === 1 ? '1 visit' : `${point.visits} visits`
+    el.title = `${point.pizzeria} — ${point.city}, ${point.country} (${visitLabel})`
+    el.setAttribute('aria-label', el.title)
+    return new Marker({ element: el }).setLngLat([point.lng, point.lat])
+  }
+
+  function clusterMarker(id: number, count: number, lngLat: [number, number]) {
+    const el = document.createElement('button')
+    el.type = 'button'
+    el.className = 'map-cluster'
+    el.textContent = String(count)
+    el.setAttribute('aria-label', `${count} pizzerias here, zoom in`)
+    el.addEventListener('click', () => {
+      map.easeTo({ center: lngLat, zoom: index.getClusterExpansionZoom(id) })
+    })
+    return new Marker({ element: el }).setLngLat(lngLat)
+  }
+
+  let shown = new globalThis.Map<string, Marker>()
+
+  function syncMarkers() {
+    const bounds = map.getBounds()
+    const features = index.getClusters(
+      [
+        bounds.getWest(),
+        bounds.getSouth(),
+        bounds.getEast(),
+        bounds.getNorth(),
+      ],
+      Math.floor(map.getZoom())
+    )
+    const next = new globalThis.Map<string, Marker>()
+    for (const feature of features) {
+      const lngLat = feature.geometry.coordinates as [number, number]
+      const props = feature.properties
+      if ('cluster' in props && props.cluster) {
+        const key = `cluster-${props.cluster_id}`
+        next.set(
+          key,
+          shown.get(key) ??
+            clusterMarker(props.cluster_id, props.point_count, lngLat).addTo(
+              map
+            )
+        )
+      } else {
+        const point = props as Point
+        next.set(
+          point.slug,
+          shown.get(point.slug) ?? pizzeriaMarker(point).addTo(map)
+        )
+      }
     }
-  })
+    for (const [key, marker] of shown) if (!next.has(key)) marker.remove()
+    shown = next
+  }
+
+  map.on('load', syncMarkers)
+  map.on('moveend', syncMarkers)
 
   // The style's background layer paints before the actual tile data
   // (water/land/roads) streams in, so revealing the canvas immediately
@@ -75,9 +152,8 @@ const points = pizzerias
     width: 100%;
     height: 70vh;
     min-height: 420px;
-    /* Matches the map style's own background layer so there's no flash
-       from the page's tomato background before MapLibre paints. */
-    background-color: #f8f4f0;
+    /* Same as the restyled land colour, so the frame doesn't flash. */
+    background-color: var(--color-ground);
     opacity: 0;
     transition: opacity 0.2s ease-in;
   }
@@ -91,9 +167,31 @@ const points = pizzerias
     width: 16px;
     height: 16px;
     border-radius: 100%;
-    background: var(--color-primary, tomato);
-    border: 2px solid #fff;
-    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
+    background: var(--color-ink);
+    border: 3px solid var(--color-char);
     cursor: pointer;
+  }
+
+  :global(.map-cluster) {
+    display: grid;
+    place-items: center;
+    min-width: 34px;
+    height: 34px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: var(--color-ink);
+    border: 3px solid var(--color-char);
+    color: var(--color-char);
+    font: 800 15px / 1 var(--font);
+    cursor: zoom-in;
+  }
+
+  :global(.map-marker:hover),
+  :global(.map-marker:focus-visible),
+  :global(.map-cluster:hover),
+  :global(.map-cluster:focus-visible) {
+    background: var(--color-char);
+    border-color: var(--color-ink);
+    color: var(--color-ink);
   }
 </style>

@@ -1,5 +1,6 @@
 {
   "name": "Yard Sale - Clapton",
+  "chain": "Yard Sale",
   "location": {
     "city": "Clapton, London",
     "country": "UK",

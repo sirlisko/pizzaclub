@@ -1,5 +1,6 @@
 {
   "name": "Yard Sale Pizza",
+  "chain": "Yard Sale",
   "location": {
     "city": "London",
     "country": "UK",

@@ -6,6 +6,7 @@ const pizzerias = defineCollection({
   loader: glob({ pattern: '*.json', base: './src/content/pizzerias' }),
   schema: z.object({
     name: z.string(),
+    chain: z.string().optional(),
     location: z.object({
       city: z.string(),
       country: z.string(),

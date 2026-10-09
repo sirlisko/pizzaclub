@@ -34,92 +34,79 @@ const lastVisit = pizzas[0]?.dateEaten
       : undefined
   }
 >
-  {pizzeria ? (
-    <div class="pizzeria-page">
-      <a class="back" href="/">
-        ← Back to all pizzas
-      </a>
-      <h2>{pizzeria.name}</h2>
-      <p class="location">
-        {pizzeria.location.city}, {pizzeria.location.country}
-      </p>
-      <p class="count">
-        {pizzas.length} pizza{pizzas.length === 1 ? '' : 's'} eaten here
-      </p>
-      {pizzas.length > 1 && (
-        <section class="pizzeria-stats">
-          <div class="stat">
-            <span class="stat-value">{avgRating.toFixed(1)}</span>
-            <span class="stat-label">Average rating</span>
-          </div>
-          <div class="stat">
-            <span class="stat-value">{formatDate(firstVisit)}</span>
-            <span class="stat-label">First visited</span>
-          </div>
-          <div class="stat">
-            <span class="stat-value">{formatDate(lastVisit)}</span>
-            <span class="stat-label">Last visited</span>
-          </div>
-        </section>
-      )}
-      <ul class="pizza-grid">
-        {pizzas.map((pizza) => (
-          <PizzaCard pizza={pizza} hidePizzeria />
-        ))}
-      </ul>
-    </div>
-  ) : (
-    <p>Couldn't find that pizzeria.</p>
-  )}
+  <div class="page">
+    {pizzeria ? (
+      <>
+        <header class="pizzeria-header">
+          <h1>{pizzeria.name}</h1>
+          <p class="pizzeria-where">
+            {pizzeria.location.city}, {pizzeria.location.country}
+          </p>
+          {pizzas.length > 1 ? (
+            <dl class="pizzeria-stats">
+              <div>
+                <dt>Pizzas eaten here</dt>
+                <dd>{pizzas.length}</dd>
+              </div>
+              <div>
+                <dt>Average rating</dt>
+                <dd>{avgRating.toFixed(1)}</dd>
+              </div>
+              <div>
+                <dt>First visit</dt>
+                <dd>{formatDate(firstVisit)}</dd>
+              </div>
+              <div>
+                <dt>Last visit</dt>
+                <dd>{formatDate(lastVisit)}</dd>
+              </div>
+            </dl>
+          ) : (
+            <p class="pizzeria-where">1 pizza eaten here</p>
+          )}
+        </header>
+        <ul class="pizza-grid">
+          {pizzas.map((pizza) => (
+            <PizzaCard pizza={pizza} hidePizzeria />
+          ))}
+        </ul>
+      </>
+    ) : (
+      <p>Couldn't find that pizzeria.</p>
+    )}
+  </div>
 </Layout>
 
 <style>
-  .pizzeria-page {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 var(--space-2) var(--space-5);
+  .pizzeria-header {
+    padding: var(--space-4) 0;
   }
-  .back {
-    display: inline-block;
-    margin-bottom: var(--space-3);
-    text-decoration: none;
-    opacity: 0.85;
+  .pizzeria-header h1 {
+    margin: 0 0 var(--space-2);
+    font-size: clamp(3rem, 8vw, 6.5rem);
   }
-  .location {
-    opacity: 0.9;
-    margin: 0 0 var(--space-1);
-  }
-  .count {
-    opacity: 0.9;
-    margin: 0 0 var(--space-3);
+  .pizzeria-where {
+    margin: 0;
+    font-size: 1.25rem;
   }
   .pizzeria-stats {
     display: flex;
-    justify-content: center;
-    gap: var(--space-4);
     flex-wrap: wrap;
-    margin: 0 0 var(--space-4);
+    gap: var(--space-3) var(--space-4);
+    margin: var(--space-3) 0 0;
   }
-  .stat {
+  .pizzeria-stats div {
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
   }
-  .stat-value {
-    font-family: var(--font-heading);
-    font-size: 1.75rem;
-    font-weight: 700;
+  .pizzeria-stats dt {
+    color: var(--color-ink-muted);
+    font-size: 0.9375rem;
   }
-  .stat-label {
-    opacity: 0.9;
-    font-size: 0.9rem;
-  }
-  .pizza-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, 220px);
-    justify-content: center;
-    gap: var(--space-3);
-    list-style: none;
+  .pizzeria-stats dd {
     margin: 0;
-    padding: 0;
+    font-size: 2rem;
+    font-weight: 800;
+    font-stretch: 70%;
   }
 </style>

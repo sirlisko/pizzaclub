@@ -1,5 +1,6 @@
 {
   "name": "Pizzeria Gino Sorbillo",
+  "chain": "Gino Sorbillo",
   "location": {
     "city": "Milan",
     "country": "IT",

@@ -1,0 +1,96 @@
+---
+import type { RankedStat } from '../lib/stats'
+
+interface Props {
+  items: RankedStat[]
+  ranked?: boolean
+}
+
+const { items, ranked = false } = Astro.props
+const List = ranked ? 'ol' : 'ul'
+const visits = (n: number) => `${n} pizza${n === 1 ? '' : 's'}`
+---
+
+<List class:list={['ranking', { 'ranking--ranked': ranked }]}>
+  {items.map((p) => (
+    <li class="ranking__row">
+      {p.href ? (
+        <a class="ranking__name" href={p.href}>
+          {p.name}
+        </a>
+      ) : (
+        <span class="ranking__name">{p.name}</span>
+      )}
+      <span class="ranking__detail">{p.detail}</span>
+      <span class="ranking__score">
+        <strong>{p.rating.toFixed(1)}</strong>
+        <span>from {visits(p.count)}</span>
+      </span>
+    </li>
+  ))}
+</List>
+
+<style>
+  .ranking {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: rank;
+  }
+  .ranking__row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      'name score'
+      'detail score';
+    align-items: baseline;
+    column-gap: var(--space-2);
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--color-ink-faint);
+  }
+  .ranking--ranked .ranking__row {
+    counter-increment: rank;
+    grid-template-columns: 2rem 1fr auto;
+    grid-template-areas:
+      'rank name score'
+      'rank detail score';
+  }
+  .ranking--ranked .ranking__row::before {
+    content: counter(rank);
+    grid-area: rank;
+    font-size: 1.75rem;
+    font-weight: 900;
+    font-stretch: var(--width-condensed);
+    line-height: 1;
+  }
+  .ranking__name {
+    grid-area: name;
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  a.ranking__name:hover {
+    text-decoration: underline;
+  }
+  .ranking__detail {
+    grid-area: detail;
+    font-size: 0.875rem;
+    color: var(--color-ink-muted);
+  }
+  .ranking__score {
+    grid-area: score;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    line-height: 1.2;
+    font-size: 0.875rem;
+    color: var(--color-ink-muted);
+    white-space: nowrap;
+  }
+  .ranking__score strong {
+    color: var(--color-ink);
+    font-size: 1.5rem;
+    font-weight: 800;
+    font-stretch: 70%;
+  }
+</style>

@@ -56,7 +56,7 @@ const max = Math.max(...data.map((d) => d.value), 1)
     text-decoration: underline;
   }
   .bar-track {
-    background: rgba(255, 255, 255, 0.25);
+    background: var(--color-ink-faint);
     border-radius: 4px;
     height: 12px;
     overflow: hidden;
@@ -64,7 +64,7 @@ const max = Math.max(...data.map((d) => d.value), 1)
   .bar-fill {
     display: block;
     height: 100%;
-    background: var(--color-surface);
+    background: var(--color-ink);
     border-radius: 4px;
   }
   .bar-value {

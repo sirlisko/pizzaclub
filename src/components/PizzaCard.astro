@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets'
-import RatingSlices from './RatingSlices.astro'
-import { formatDate, formatPrice, type PizzaEntry } from '../lib/content'
+import RatingRing from './RatingRing.astro'
+import { formatDate, type PizzaEntry } from '../lib/content'
 
 interface Props {
   pizza: PizzaEntry
@@ -9,88 +9,85 @@ interface Props {
 }
 
 const { pizza, hidePizzeria = false } = Astro.props
-const price = formatPrice(pizza.price)
+const { location } = pizza.pizzeria
 ---
 
 <li
   class="pizza"
+  data-name={pizza.pizzaName}
   data-pizzeria={pizza.pizzeria.name}
-  data-city={pizza.pizzeria.location.city}
-  data-country={pizza.pizzeria.location.country}
+  data-city={location.city}
+  data-country={location.country}
   data-rating={pizza.rating}
   data-date={pizza.dateEaten}
   data-price={pizza.price?.amount ?? ''}
 >
   <a href={`/pizza/${pizza.slug}/`} class="pizza__link">
-    {!hidePizzeria && <p class="pizza__pizzeria">{pizza.pizzeria.name}</p>}
-    <time class="pizza__date" datetime={pizza.dateEaten}>
-      {formatDate(pizza.dateEaten)}
-    </time>
-    {pizza.photo ? (
-      <Image
-        class="pizza__pic"
-        src={pizza.photo}
-        alt={`${pizza.pizzaName} at ${pizza.pizzeria.name}`}
-        width={140}
-        height={140}
-        densities={[1, 2]}
-        fit="cover"
-      />
-    ) : (
-      <img
-        class="pizza__pic pizza__pic--fallback"
-        src="/pizza.svg"
-        alt=""
-        width="140"
-        height="140"
-      />
+    <RatingRing rating={pizza.rating} class="pizza__ring">
+      {pizza.photo && (
+        <Image
+          src={pizza.photo}
+          alt=""
+          width={300}
+          height={300}
+          densities={[1, 2]}
+          fit="cover"
+        />
+      )}
+    </RatingRing>
+    <span class="pizza__name">{pizza.pizzaName}</span>
+    <span class="visually-hidden">, rated {pizza.rating} out of 5</span>
+    {!hidePizzeria && (
+      <span class="pizza__pizzeria">{pizza.pizzeria.name}</span>
     )}
-    <RatingSlices rating={pizza.rating} />
-    <p class="pizza__location">
-      {pizza.pizzeria.location.city}, {pizza.pizzeria.location.country}
-    </p>
-    {price && <p class="pizza__price">{price}</p>}
+    <span class="pizza__meta">
+      {location.city},{' '}
+      <time datetime={pizza.dateEaten}>{formatDate(pizza.dateEaten)}</time>
+    </span>
+    {pizza.notes && <span class="pizza__note">{pizza.notes}</span>}
   </a>
 </li>
 
 <style>
   .pizza {
     list-style: none;
-    margin: 0;
-    padding: 0;
   }
   .pizza__link {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
     text-decoration: none;
-    color: inherit;
+  }
+  .pizza__ring {
+    margin-bottom: 0.75rem;
+  }
+  .pizza__name {
+    font-size: 1.5rem;
+    line-height: 1.05;
+    font-weight: 800;
+    font-stretch: 70%;
+  }
+  .pizza__link:hover .pizza__name {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
   }
   .pizza__pizzeria {
-    background: var(--color-surface);
-    border-radius: 5px;
-    color: var(--color-primary);
-    font-size: 1.1rem;
-    font-weight: bold;
-    padding: var(--space-1);
-    margin: 0 0 var(--space-1);
+    font-weight: 500;
   }
-  .pizza__date {
-    display: block;
-    margin-bottom: var(--space-1);
-    opacity: 0.85;
+  .pizza__meta {
+    font-size: 0.875rem;
+    color: var(--color-ink-muted);
   }
-  .pizza__pic {
-    width: 140px;
-    height: 140px;
-    object-fit: cover;
-    border-radius: 100%;
-    border: solid 4px var(--color-surface);
-    padding: 4px;
-  }
-  .pizza__pic--fallback {
-    padding: 20px;
-  }
-  .pizza__location,
-  .pizza__price {
-    margin: var(--space-1) 0 0;
+  .pizza__note {
+    margin-top: 0.25rem;
+    padding-top: 0.375rem;
+    border-top: 1px solid var(--color-ink-faint);
+    font-size: 0.9375rem;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 </style>

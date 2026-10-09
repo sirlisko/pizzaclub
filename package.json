@@ -11,9 +11,12 @@
   "homepage": "https://pizzaclub.sirlisko.com",
   "dependencies": {
     "astro": "^7",
-    "maplibre-gl": "^6"
+    "maplibre-gl": "^6",
+    "supercluster": "8.0.1",
+    "world-map-country-shapes": "2.0.0"
   },
   "devDependencies": {
+    "@types/supercluster": "7.1.3",
     "prettier": "^3",
     "prettier-plugin-astro": "^1",
     "sharp": "^0.35.5"

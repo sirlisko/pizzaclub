@@ -8,16 +8,26 @@ const mapped = pizzerias.filter((p) => p.geopoint).length
 ---
 
 <Layout title="Map | Pizza Club" description="Every pizzeria on the map.">
-  <p class="intro">
-    {mapped} of {pizzerias.length} pizzerias plotted below — click a marker to
-    see the place.
-  </p>
+  <div class="page intro">
+    <h1>Map</h1>
+    <p>
+      {mapped} of {pizzerias.length} pizzerias are on the map. Select a marker
+      to open the pizzeria.
+    </p>
+  </div>
   <WorldMap pizzerias={pizzerias} />
 </Layout>
 
 <style>
   .intro {
+    padding-top: var(--space-4);
+    padding-bottom: var(--space-3);
+  }
+  .intro h1 {
     margin: 0 0 var(--space-2);
-    padding: 0 var(--space-2);
+    font-size: clamp(3rem, 8vw, 6.5rem);
+  }
+  .intro p {
+    margin: 0;
   }
 </style>

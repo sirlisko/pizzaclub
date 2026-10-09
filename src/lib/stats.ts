@@ -1,84 +1,136 @@
-import type { PizzaEntry } from './content'
+import type { PizzaEntry, Pizzeria } from './content'
 
-export type PizzeriaStat = {
-  pizzeria: string
-  slug: string
+export type RankedStat = {
+  name: string
+  href?: string
+  detail: string
   count: number
   rating: number
 }
 export type YearStat = { year: number; count: number; avgRating: number }
 
 // How many "phantom visits" of the overall average get mixed into each
-// pizzeria's own average before ranking (see topPizzerias). Higher = more
-// visits needed before a pizzeria's own rating can pull away from the pack.
+// group's own average before ranking (see rankByWeightedAverage). Higher =
+// more visits needed before a group's own rating can pull away from the pack.
 const OVERALL_WEIGHT = 3
 
-function groupByPizzeria(pizzas: PizzaEntry[]) {
-  const byPizzeria = new Map<
-    string,
-    {
-      pizzeria: string
-      slug: string
-      favourite: boolean
-      total: number
-      count: number
-    }
-  >()
+type Group = {
+  name: string
+  pizzerias: Map<string, Pizzeria>
+  total: number
+  count: number
+}
+
+function groupPizzas(
+  pizzas: PizzaEntry[],
+  keyOf: (pizza: PizzaEntry) => { key: string; name: string }
+): Group[] {
+  const groups = new Map<string, Group>()
   for (const pizza of pizzas) {
-    const entry = byPizzeria.get(pizza.pizzeria._id) ?? {
-      pizzeria: pizza.pizzeria.name,
-      slug: pizza.pizzeria.slug,
-      favourite: Boolean(pizza.pizzeria.favourite),
+    const { key, name } = keyOf(pizza)
+    const group = groups.get(key) ?? {
+      name,
+      pizzerias: new Map(),
       total: 0,
       count: 0,
     }
-    entry.total += pizza.rating
-    entry.count += 1
-    byPizzeria.set(pizza.pizzeria._id, entry)
+    group.pizzerias.set(pizza.pizzeria._id, pizza.pizzeria)
+    group.total += pizza.rating
+    group.count += 1
+    groups.set(key, group)
   }
-  return byPizzeria
+  return [...groups.values()]
 }
 
-// Ranks by a Bayesian average, not the raw per-pizzeria average: a single
-// 5-star visit is blended with the overall average (weighted as if it were
-// OVERALL_WEIGHT more visits at the overall average) before ranking, so it
-// can't outrank a place proven great over many visits. The displayed
-// `rating` is still each pizzeria's real, unblended average.
-export function topPizzerias(pizzas: PizzaEntry[], limit = 8): PizzeriaStat[] {
+// Ranks by a Bayesian average, not the raw average: a single 5-star visit is
+// blended with the overall average (weighted as if it were OVERALL_WEIGHT
+// more visits at the overall average) before ranking, so it can't outrank a
+// place proven great over many visits. Callers still show each group's real,
+// unblended average.
+function rankByWeightedAverage(
+  pizzas: PizzaEntry[],
+  groups: Group[],
+  limit: number
+): Group[] {
   if (pizzas.length === 0) return []
   const overallAvg =
     pizzas.reduce((sum, p) => sum + p.rating, 0) / pizzas.length
-
-  return [...groupByPizzeria(pizzas).values()]
-    .map(({ pizzeria, slug, total, count }) => {
-      const rating = total / count
-      const weighted =
-        (count * rating + OVERALL_WEIGHT * overallAvg) /
-        (count + OVERALL_WEIGHT)
-      return { pizzeria, slug, count, rating, weighted }
-    })
-    .sort((a, b) => b.weighted - a.weighted || b.count - a.count)
+  const weighted = (g: Group) =>
+    (g.total + OVERALL_WEIGHT * overallAvg) / (g.count + OVERALL_WEIGHT)
+  return [...groups]
+    .sort((a, b) => weighted(b) - weighted(a) || b.count - a.count)
     .slice(0, limit)
-    .map(({ pizzeria, slug, count, rating }) => ({
-      pizzeria,
-      slug,
-      count,
-      rating,
-    }))
 }
 
-// Surfaces pizzerias explicitly flagged `favourite` in Sanity, independent
-// of topPizzerias' ranking — a hand-picked call-out rather than something
-// derived from visit count or rating.
-export function personalFavourites(pizzas: PizzaEntry[]): PizzeriaStat[] {
-  return [...groupByPizzeria(pizzas).values()]
-    .filter((p) => p.favourite)
-    .map(({ pizzeria, slug, total, count }) => ({
-      pizzeria,
-      slug,
-      count,
-      rating: total / count,
-    }))
+// "Camberwell, London" and "London" are both London.
+export function cityOf(pizzeria: Pizzeria): string {
+  return pizzeria.location.city.split(',').at(-1)!.trim()
+}
+
+// Branches of the same chain rank as one entry; a chain with a single
+// visited branch reads and links like any other pizzeria.
+export function topPizzerias(pizzas: PizzaEntry[], limit = 8): RankedStat[] {
+  const groups = groupPizzas(pizzas, ({ pizzeria }) => ({
+    key: pizzeria.chain ?? pizzeria._id,
+    name: pizzeria.chain ?? pizzeria.name,
+  }))
+  return rankByWeightedAverage(pizzas, groups, limit).map((g) => {
+    const branches = [...g.pizzerias.values()]
+    const cities = [...new Set(branches.map(cityOf))].join(', ')
+    const stat = { count: g.count, rating: g.total / g.count }
+    return branches.length === 1
+      ? {
+          ...stat,
+          name: branches[0].name,
+          href: `/pizzeria/${branches[0].slug}/`,
+          detail: cities,
+        }
+      : {
+          ...stat,
+          name: g.name,
+          detail: `${branches.length} branches in ${cities}`,
+        }
+  })
+}
+
+// Towns passed through for a single pizza would otherwise crowd the list.
+const MIN_PIZZAS_PER_CITY = 2
+
+export function topCities(pizzas: PizzaEntry[], limit = 8): RankedStat[] {
+  const groups = groupPizzas(pizzas, ({ pizzeria }) => ({
+    key: `${cityOf(pizzeria)}|${pizzeria.location.country}`,
+    name: cityOf(pizzeria),
+  })).filter((g) => g.count >= MIN_PIZZAS_PER_CITY)
+  return rankByWeightedAverage(pizzas, groups, limit).map((g) => {
+    const places = g.pizzerias.size
+    const [first] = g.pizzerias.values()
+    return {
+      name: g.name,
+      detail: `${first.location.country}, ${places} pizzeria${places === 1 ? '' : 's'}`,
+      count: g.count,
+      rating: g.total / g.count,
+    }
+  })
+}
+
+// Surfaces pizzerias explicitly flagged `favourite` in their content entry,
+// independent of topPizzerias' ranking — a hand-picked call-out rather than
+// something derived from visit count or rating.
+export function personalFavourites(pizzas: PizzaEntry[]): RankedStat[] {
+  return groupPizzas(
+    pizzas.filter((p) => p.pizzeria.favourite),
+    ({ pizzeria }) => ({ key: pizzeria._id, name: pizzeria.name })
+  )
+    .map((g) => {
+      const [pizzeria] = g.pizzerias.values()
+      return {
+        name: g.name,
+        href: `/pizzeria/${pizzeria.slug}/`,
+        detail: cityOf(pizzeria),
+        count: g.count,
+        rating: g.total / g.count,
+      }
+    })
     .sort((a, b) => b.rating - a.rating || a.count - b.count)
 }
 

@@ -1,9 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import BarChart from '../components/BarChart.astro'
+import RankedList from '../components/RankedList.astro'
+import CountriesMap from '../components/CountriesMap.astro'
 import { getAllPizzas } from '../lib/content'
 import {
   topPizzerias,
+  topCities,
   personalFavourites,
   countriesVisited,
   pizzasPerYear,
@@ -11,8 +14,14 @@ import {
 
 const pizzas = await getAllPizzas()
 const pizzerias = topPizzerias(pizzas)
+const cities = topCities(pizzas)
 const favourites = personalFavourites(pizzas)
 const countries = countriesVisited(pizzas)
+const pizzasByCountry: Record<string, number> = {}
+for (const { pizzeria } of pizzas) {
+  const { country } = pizzeria.location
+  pizzasByCountry[country] = (pizzasByCountry[country] ?? 0) + 1
+}
 const perYear = pizzasPerYear(pizzas)
 const overallAvg = pizzas.reduce((sum, p) => sum + p.rating, 0) / pizzas.length
 ---
@@ -21,98 +30,105 @@ const overallAvg = pizzas.reduce((sum, p) => sum + p.rating, 0) / pizzas.length
   title="Stats | Pizza Club"
   description="Pizza Club numbers: top pizzerias, countries visited, pizzas per year."
 >
-  <section class="headline-stats">
-    <div class="stat">
-      <span class="stat-value">{pizzas.length}</span>
-      <span class="stat-label">Pizzas eaten</span>
-    </div>
-    <div class="stat">
-      <span class="stat-value">{countries.length}</span>
-      <span class="stat-label">Countries visited</span>
-    </div>
-    <div class="stat">
-      <span class="stat-value">{overallAvg.toFixed(1)}</span>
-      <span class="stat-label">Average rating</span>
-    </div>
-  </section>
+  <div class="page">
+    <h1>Stats</h1>
+    <dl class="headline-stats">
+      <div>
+        <dt>Pizzas eaten</dt>
+        <dd>{pizzas.length}</dd>
+      </div>
+      <div>
+        <dt>Countries</dt>
+        <dd>{countries.length}</dd>
+      </div>
+      <div>
+        <dt>Average rating</dt>
+        <dd>{overallAvg.toFixed(1)}</dd>
+      </div>
+    </dl>
 
-  <section class="chart-section">
-    <h2>Top pizzerias</h2>
-    <BarChart
-      data={pizzerias.map((p) => ({
-        label: p.pizzeria,
-        href: `/pizzeria/${p.slug}/`,
-        value: p.rating,
-      }))}
-      format={(v) => `${v.toFixed(1)}/5`}
-    />
-  </section>
-
-  {favourites.length > 0 && (
     <section class="chart-section">
-      <h2>Personal favourites</h2>
+      <h2>Top pizzerias</h2>
       <p class="section-note">
-        Hand-picked call-outs, marked in Sanity — great regardless of how the
-        numbers rank them.
+        Ranked by average rating, with more visits counting for more, so one
+        great pizza doesn't beat a place that's been great every time. Branches
+        of the same chain count together.
       </p>
+      <RankedList items={pizzerias} ranked />
+    </section>
+
+    <section class="chart-section">
+      <h2>Top cities</h2>
+      <p class="section-note">
+        Cities with at least two pizzas, ranked the same way.
+      </p>
+      <RankedList items={cities} ranked />
+    </section>
+
+    {favourites.length > 0 && (
+      <section class="chart-section">
+        <h2>Personal favourites</h2>
+        <p class="section-note">
+          Hand-picked, great regardless of how the numbers rank them.
+        </p>
+        <RankedList items={favourites} />
+      </section>
+    )}
+
+    <section class="chart-section">
+      <h2>Pizzas per year</h2>
       <BarChart
-        data={favourites.map((p) => ({
-          label: p.pizzeria,
-          href: `/pizzeria/${p.slug}/`,
-          value: p.rating,
-        }))}
-        format={(v) => `${v.toFixed(1)}/5`}
+        data={perYear.map((y) => ({ label: String(y.year), value: y.count }))}
       />
     </section>
-  )}
 
-  <section class="chart-section">
-    <h2>Pizzas per year</h2>
-    <BarChart
-      data={perYear.map((y) => ({ label: String(y.year), value: y.count }))}
-    />
-  </section>
-
-  <section class="chart-section">
-    <h2>Countries visited</h2>
-    <p class="country-list">{countries.join(' · ')}</p>
-  </section>
+    <section class="countries-section">
+      <h2>Countries</h2>
+      <CountriesMap counts={pizzasByCountry} />
+    </section>
+  </div>
 </Layout>
 
 <style>
+  h1 {
+    margin: 0;
+    padding: var(--space-4) 0 var(--space-3);
+    font-size: clamp(3rem, 8vw, 6.5rem);
+  }
   .headline-stats {
     display: flex;
-    justify-content: center;
-    gap: var(--space-4);
-    margin: 0 0 var(--space-4);
     flex-wrap: wrap;
+    gap: var(--space-3) var(--space-5);
+    margin: 0 0 var(--space-5);
   }
-  .stat {
+  .headline-stats div {
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
   }
-  .stat-value {
-    font-family: var(--font-heading);
-    font-size: 2.5rem;
-    font-weight: 700;
+  .headline-stats dt {
+    color: var(--color-ink-muted);
   }
-  .stat-label {
-    opacity: 0.9;
+  .headline-stats dd {
+    margin: 0;
+    font-size: 3.5rem;
+    line-height: 1;
+    font-weight: 900;
+    font-stretch: var(--width-condensed);
   }
   .chart-section {
-    max-width: 500px;
-    margin: 0 auto var(--space-4);
-    padding: 0 var(--space-2);
+    max-width: 40rem;
+    margin: 0 0 var(--space-5);
   }
   .chart-section h2 {
-    margin-bottom: var(--space-2);
+    margin: 0 0 var(--space-2);
+    font-size: 2.5rem;
+  }
+  .countries-section h2 {
+    margin: 0 0 var(--space-2);
+    font-size: 2.5rem;
   }
   .section-note {
-    opacity: 0.8;
-    font-size: 0.85rem;
-    margin: calc(var(--space-2) * -1) 0 var(--space-2);
-  }
-  .country-list {
-    opacity: 0.9;
+    margin: 0 0 var(--space-2);
+    color: var(--color-ink-muted);
   }
 </style>

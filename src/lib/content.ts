@@ -5,6 +5,7 @@ export type Pizzeria = {
   _id: string
   name: string
   slug: string
+  chain?: string
   location: { city: string; country: string; raw?: string }
   geopoint?: { lat: number; lng: number }
   favourite?: boolean
@@ -26,10 +27,15 @@ function toPizzeria({ id, data }: CollectionEntry<'pizzerias'>): Pizzeria {
   return { _id: id, slug: id, ...data }
 }
 
-async function toPizza({ id, data }: CollectionEntry<'pizzas'>): Promise<PizzaEntry> {
+async function toPizza({
+  id,
+  data,
+}: CollectionEntry<'pizzas'>): Promise<PizzaEntry> {
   const pizzeria = await getEntry(data.pizzeria)
   if (!pizzeria) {
-    throw new Error(`Pizza "${id}" references unknown pizzeria "${data.pizzeria.id}"`)
+    throw new Error(
+      `Pizza "${id}" references unknown pizzeria "${data.pizzeria.id}"`
+    )
   }
   return { _id: id, slug: id, ...data, pizzeria: toPizzeria(pizzeria) }
 }
@@ -48,7 +54,9 @@ export async function getPizzaBySlug(slug: string): Promise<PizzaEntry | null> {
   return pizza ? toPizza(pizza) : null
 }
 
-export async function getAllPizzerias(): Promise<(Pizzeria & { visits: number })[]> {
+export async function getAllPizzerias(): Promise<
+  (Pizzeria & { visits: number })[]
+> {
   const pizzas = await getCollection('pizzas')
   return (await getCollection('pizzerias'))
     .map((p) => ({
@@ -62,12 +70,16 @@ export async function getAllPizzeriaSlugs(): Promise<string[]> {
   return (await getCollection('pizzerias')).map((p) => p.id)
 }
 
-export async function getPizzeriaBySlug(slug: string): Promise<Pizzeria | null> {
+export async function getPizzeriaBySlug(
+  slug: string
+): Promise<Pizzeria | null> {
   const pizzeria = await getEntry('pizzerias', slug)
   return pizzeria ? toPizzeria(pizzeria) : null
 }
 
-export async function getPizzasByPizzeria(pizzeriaId: string): Promise<PizzaEntry[]> {
+export async function getPizzasByPizzeria(
+  pizzeriaId: string
+): Promise<PizzaEntry[]> {
   return (await getAllPizzas()).filter((p) => p.pizzeria._id === pizzeriaId)
 }
 

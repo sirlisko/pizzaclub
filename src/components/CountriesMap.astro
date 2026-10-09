@@ -1,0 +1,134 @@
+---
+import countries from 'world-map-country-shapes'
+import bounds from 'world-map-country-shapes/bounds'
+
+interface Props {
+  // Pizza count per country, keyed by the country codes used in the content.
+  counts: Record<string, number>
+}
+
+const { counts } = Astro.props
+
+// The content uses "UK"; the shapes use ISO 3166-1, where it's "GB".
+const isoOf = (code: string) => (code === 'UK' ? 'GB' : code)
+const byIso = new Map(
+  Object.entries(counts).map(([code, n]) => [isoOf(code), n])
+)
+const names = new Intl.DisplayNames('en', { type: 'region' })
+
+const steps = [
+  { min: 10, label: '10 or more', className: 'shade-3' },
+  { min: 3, label: '3 to 9', className: 'shade-2' },
+  { min: 1, label: '1 or 2', className: 'shade-1' },
+]
+const shadeOf = (n = 0) => steps.find((s) => n >= s.min)?.className
+
+const boxes = Object.values(bounds).map((b) => b.bounds)
+const minY = Math.floor(Math.min(...boxes.map((b) => b[1])))
+const maxY = Math.ceil(Math.max(...boxes.map((b) => b[3])))
+const viewBox = `0 ${minY} 2000 ${maxY - minY}`
+
+const visited = [...byIso.entries()]
+  .map(([iso, n]) => ({ name: names.of(iso) ?? iso, n }))
+  .sort((a, b) => b.n - a.n)
+---
+
+<figure class="countries">
+  <svg viewBox={viewBox} role="img" aria-labelledby="countries-caption">
+    {countries.map(({ id, shape }) => {
+      const n = byIso.get(id)
+      return (
+        <path d={shape} class={shadeOf(n)}>
+          {n && <title>{`${names.of(id)}: ${n} pizza${n === 1 ? '' : 's'}`}</title>}
+        </path>
+      )
+    })}
+  </svg>
+  <figcaption id="countries-caption">
+    <ul class="countries__key" aria-label="Shading">
+      {steps.map((s) => (
+        <li>
+          <span class:list={['countries__swatch', s.className]} />
+          {s.label} pizzas
+        </li>
+      ))}
+    </ul>
+    <ul class="countries__list">
+      {visited.map(({ name, n }) => (
+        <li>
+          {name} <span>{n}</span>
+        </li>
+      ))}
+    </ul>
+  </figcaption>
+</figure>
+
+<style>
+  .countries {
+    margin: 0;
+  }
+  svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  path {
+    /* Unvisited countries sink below the page red, like the map's water. */
+    fill: #9a2818;
+    stroke: var(--color-ground);
+    stroke-width: 0.6;
+  }
+  .shade-1 {
+    fill: rgb(255 253 249 / 0.45);
+  }
+  .shade-2 {
+    fill: rgb(255 253 249 / 0.7);
+  }
+  .shade-3 {
+    fill: var(--color-ink);
+  }
+  figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+  }
+  .countries__key,
+  .countries__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .countries__key {
+    font-size: 0.875rem;
+    color: var(--color-ink-muted);
+  }
+  .countries__key li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .countries__swatch {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 3px;
+  }
+  .countries__swatch.shade-1 {
+    background: rgb(255 253 249 / 0.45);
+  }
+  .countries__swatch.shade-2 {
+    background: rgb(255 253 249 / 0.7);
+  }
+  .countries__swatch.shade-3 {
+    background: var(--color-ink);
+  }
+  .countries__list span {
+    font-weight: 800;
+    font-stretch: 70%;
+    font-size: 1.25rem;
+    margin-left: 0.25rem;
+  }
+</style>

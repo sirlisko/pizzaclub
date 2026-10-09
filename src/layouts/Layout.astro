@@ -8,25 +8,34 @@ const {
   title = 'Pizza Club',
   description = "sirLisko's tasty Pizza Adventure by reviewing the best Pizza around the Globe.",
 } = Astro.props
+
+const path = Astro.url.pathname
+const section = path.startsWith('/map')
+  ? 'map'
+  : path.startsWith('/stats')
+    ? 'stats'
+    : 'pizzas'
+const nav = [
+  { id: 'pizzas', href: '/', label: 'Pizzas' },
+  { id: 'map', href: '/map', label: 'Map' },
+  { id: 'stats', href: '/stats', label: 'Stats' },
+]
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="author" content="Luca Lischetti" />
     <meta name="description" content={description} />
-    <meta name="keywords" content="Pizza, Pizzeria, Pizza Club" />
+    <meta name="theme-color" content="#b3301f" />
     <link rel="icon" href="/pizza.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Open+Sans:wght@400;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..100,400..900&display=swap"
       rel="stylesheet"
     />
     {import.meta.env.PROD && (
@@ -39,14 +48,18 @@ const {
   </head>
   <body>
     <header class="site-header">
-      <a class="site-title" href="/">
-        <h1>Pizza Club</h1>
+      <a class="wordmark" href="/">
+        Pizza Club
       </a>
-      <p class="tagline">My tasty Pizza Adventure around the World.</p>
-      <nav class="site-nav">
-        <a href="/">List</a>
-        <a href="/map">Map</a>
-        <a href="/stats">Stats</a>
+      <nav class="site-nav" aria-label="Main">
+        {nav.map((item) => (
+          <a
+            href={item.href}
+            aria-current={section === item.id ? 'page' : undefined}
+          >
+            {item.label}
+          </a>
+        ))}
       </nav>
     </header>
 
@@ -56,104 +69,148 @@ const {
 
     <footer class="site-footer">
       <span>
-        Created with ♥ by <a href="https://sirlisko.com">Luca Lischetti</a>.
+        Eaten and written up by{' '}
+        <a href="https://sirlisko.com">Luca Lischetti</a>
       </span>
-      <span>
-        View project source on{' '}
-        <a href="https://github.com/sirlisko/pizzaclub">GitHub</a>.
-      </span>
+      <a href="https://github.com/sirlisko/pizzaclub">Source on GitHub</a>
     </footer>
   </body>
 </html>
 
 <style is:global>
   :root {
-    --color-primary: tomato;
-    --color-surface: #fff;
-    --color-text: #fff;
-    --font-heading: 'Oswald', sans-serif;
-    --font-body: 'Open Sans', sans-serif;
+    /* White on --color-ground is ~6:1; the old tomato ground was ~3:1. */
+    --color-ground: #b3301f;
+    --color-ink: #fffdf9;
+    --color-ink-muted: rgb(255 253 249 / 0.82);
+    --color-ink-faint: rgb(255 253 249 / 0.2);
+    --color-char: #2a1712;
+    --font: 'Archivo', system-ui, sans-serif;
+    --width-condensed: 62%;
     --space-1: 0.5rem;
     --space-2: 1rem;
     --space-3: 1.5rem;
     --space-4: 2.5rem;
     --space-5: 4.5rem;
-    --radius: 8px;
+    --page-width: 75rem;
+    --gutter: 1.5rem;
+    --radius: 6px;
   }
 
   * {
     box-sizing: border-box;
   }
 
-  body {
-    margin: 0;
-    background-color: var(--color-primary);
-    color: var(--color-text);
-    font-family: var(--font-body);
-    text-align: center;
+  [hidden] {
+    display: none !important;
   }
 
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    background-image: url('/pizza.svg');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: contain;
-    opacity: 0.1;
+  body {
+    margin: 0;
+    background-color: var(--color-ground);
+    color: var(--color-ink);
+    font-family: var(--font);
+    font-size: 1.0625rem;
+    line-height: 1.5;
   }
 
   a {
-    color: var(--color-text);
+    color: inherit;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-ink);
+    outline-offset: 3px;
   }
 
   h1,
   h2,
   h3 {
-    font-family: var(--font-heading);
-    letter-spacing: 0.5px;
+    font-stretch: var(--width-condensed);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+  }
+
+  .page {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding: 0 var(--gutter) var(--space-5);
+  }
+
+  .pizza-grid {
+    display: grid;
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(min(11.25rem, calc(50% - 0.625rem)), 1fr)
+    );
+    gap: var(--space-4) 1.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  @media (min-width: 40rem) {
+    .pizza-grid {
+      gap: 3rem 2rem;
+    }
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 </style>
 
 <style>
-  .site-header {
-    padding: var(--space-3) var(--space-2) var(--space-2);
+  .site-header,
+  .site-footer {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding: 1.25rem var(--gutter);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem 2rem;
   }
-  .site-title {
+  .wordmark {
+    font-size: 2.125rem;
+    font-weight: 900;
+    font-stretch: var(--width-condensed);
     text-decoration: none;
-  }
-  .site-title h1 {
-    margin: 0;
-    font-size: clamp(2.5rem, 8vw, 4.5rem);
-  }
-  .tagline {
-    margin: var(--space-1) 0 var(--space-2);
-    opacity: 0.9;
   }
   .site-nav {
     display: flex;
-    justify-content: center;
-    gap: var(--space-3);
-    font-family: var(--font-heading);
-    text-transform: uppercase;
-    font-size: 0.9rem;
-    letter-spacing: 1px;
+    gap: 1.75rem;
+    font-size: 1.125rem;
+    font-weight: 600;
   }
   .site-nav a {
     text-decoration: none;
-    border-bottom: 2px solid transparent;
-    padding-bottom: 2px;
   }
-  .site-nav a:hover {
-    border-bottom-color: currentColor;
+  .site-nav a:hover,
+  .site-nav a[aria-current='page'] {
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+    text-underline-offset: 8px;
   }
   .site-footer {
-    line-height: 1.6;
-    padding: var(--space-4) var(--space-2) var(--space-4);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-1);
+    width: min(100% - 2 * var(--gutter), var(--page-width) - 2 * var(--gutter));
+    padding: var(--space-4) 0;
+    border-top: 1px solid rgb(255 253 249 / 0.3);
+    font-size: 0.875rem;
   }
 </style>
