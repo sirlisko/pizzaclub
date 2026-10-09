@@ -16,10 +16,12 @@
     "world-map-country-shapes": "2.0.0"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.10",
     "@types/supercluster": "7.1.3",
     "prettier": "^3",
     "prettier-plugin-astro": "^1",
-    "sharp": "^0.35.5"
+    "sharp": "^0.35.5",
+    "typescript": "^6.0.3"
   },
   "keywords": [
     "pizza"
@@ -30,7 +32,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "format": "prettier --write 'src/**/*.{astro,ts,js}'",
-    "import:photos": "node scripts/import-photos.ts"
+    "import:photos": "node scripts/import-photos.ts",
+    "check": "astro check"
   },
   "repository": {
     "type": "git",
