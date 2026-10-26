@@ -1,0 +1,12 @@
+{
+  "name": "The Pembury Tavern",
+  "location": {
+    "city": "London",
+    "country": "UK",
+    "raw": "90 Amhurst Road, London, E8 1JH, England"
+  },
+  "geopoint": {
+    "lat": 51.5493378,
+    "lng": -0.0592592
+  }
+}
